@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\src\PontoCerto.Domain\PontoCerto.Domain\PontoCerto.Domain.csproj" />
+      <ProjectReference Include="..\..\src\PontoCerto.Domain\PontoCerto.Domain.csproj" />
       <ProjectReference Include="..\..\src\PontoCerto.Domain\PontoCerto.Domain\PontoCerto.Domain.csproj" />
     </ItemGroup>
 
