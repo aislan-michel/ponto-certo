@@ -12,11 +12,13 @@ Quais as principais funcionalidades?
   3. Cadastrar, editar e visualizar 1 colaborador por vez.
   4. Cadastrar uma lista de colaboradores via planilha csv ou excel.
   5. Ativar e inativar o acesso de 1 colaborador.
+  6. Alterar senha.
 
 * É necessário que o colaborador possa:
   1. Efetuar login, suas credenciais de acesso serão enviadas por e-mail.
   2. Efetuar o registro de ponto.
   3. Visualizar o histórico de registros de ponto.
+  4. Alterar senha.
 
 Quais dados serão coletados da Empresa?
 
@@ -37,6 +39,7 @@ Quais dados serão coletados do colaborador?
 * Nome e sobrenome
 * Data de nascimento
 * E-mail para notificações
+* Qual empresa pertence
 
 Como funciona o registro de ponto?
 
