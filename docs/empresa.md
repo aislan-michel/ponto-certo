@@ -1,10 +1,10 @@
 #### Funcionalidades:
 * Efetuar cadastro e login.
 * Visualizar a lista de colaboradores.
-* Cadastrar, editar e visualizar 1 colaborador por vez.
+* Cadastrar, atualizar e visualizar 1 colaborador por vez.
 * Cadastrar uma lista de colaboradores via planilha csv ou excel.
 * Ativar e inativar o acesso de 1 colaborador.
-* Alterar senha.
+* Alterar sua senha.
 
 #### Quais dados serão coletados da Empresa?
 * Nome ou Razão Social
