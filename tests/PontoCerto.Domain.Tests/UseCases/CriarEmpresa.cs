@@ -13,6 +13,6 @@ public class CriarEmpresa
         
         Assert.NotNull(empresa);
         Assert.NotEmpty(empresa.Cnpj);
-        Assert.Empty(empresa.Contato.Emails);
+        Assert.Null(empresa.Contato);
     }
 }
