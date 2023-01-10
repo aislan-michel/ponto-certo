@@ -10,4 +10,6 @@ public interface IEmpresaRepository
     Task AtualizarColaborador(Colaborador colaborador);
     Task CadastrarColaboradores(IEnumerable<Colaborador> colaboradores);
     Task AtualizarStatusColaborador(long colaboradorId);
+    void Adicionar(Empresa empresa);
+    Task Salvar();
 }

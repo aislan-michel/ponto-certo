@@ -1,0 +1,40 @@
+@model PontoCerto.WebApplication.Models.Account.EmpresaDto
+
+@{
+    ViewData["Title"] = "Registre sua empresa";
+    Layout = "_Layout";
+}
+
+<form method="post" asp-action="RegistrarEmpresa">
+    <div class="mb-3">
+        @Html.LabelFor(x => x.Nome, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Nome, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Nome, "", new { @class = "invalid-feedback" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(x => x.Cnpj, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Cnpj, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Cnpj, "", new { @class = "invalid-feedback" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(x => x.QuantidadeFuncionarios, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.QuantidadeFuncionarios, "", new { @class = "form-control", @type = "number" })
+        @Html.ValidationMessageFor(x => x.QuantidadeFuncionarios, "", new { @class = "invalid-feedback" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(x => x.UserName, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.UserName, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "invalid-feedback" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(x => x.Password, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Password, "", new { @class = "form-control", @type = "password" })
+        @Html.ValidationMessageFor(x => x.Password, "", new { @class = "invalid-feedback" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>

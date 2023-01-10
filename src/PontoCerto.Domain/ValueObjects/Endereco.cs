@@ -1,15 +1,22 @@
 namespace PontoCerto.Domain.ValueObjects;
 
-public struct Endereco
+public class Endereco
 {
+    public Endereco()
+    {
+        
+    }
+    
     public Endereco(
-        string logradouro, string numero, string bairro, string cidade, string estado)
+        string logradouro, string numero, string bairro, string cidade, string estado,
+        string cep)
     {
         Logradouro = logradouro;
         Numero = numero;
         Bairro = bairro;
         Cidade = cidade;
         Estado = estado;
+        Cep = cep;
     }
 
     public string Logradouro { get; }
@@ -17,4 +24,5 @@ public struct Endereco
     public string Bairro { get; }
     public string Cidade { get; }
     public string Estado { get; }
+    public string Cep { get; set; }
 }
