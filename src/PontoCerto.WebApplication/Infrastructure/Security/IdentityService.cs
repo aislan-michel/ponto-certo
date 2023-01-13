@@ -75,9 +75,21 @@ public class IdentityService : IIdentityService
             return;
         }
 
-        await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Sid, user.Id));
+        var addClaimResult = await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Sid, user.Id));
 
-        await _signInManager.PasswordSignInAsync(userName, password, false, false);
+        if (!addClaimResult.Succeeded)
+        {
+            var mensagens = string.Join("\n", addClaimResult.Errors.Select(x => $"{x.Code} - {x.Description}")); 
+            _logger.LogError("identity lib: {mensagens}", mensagens);
+            _notificator.Add("UserName", "Falha ao autenticar usuario");
+        }
+
+        var passwordSignInResult = await _signInManager.PasswordSignInAsync(userName, password, false, false);
+
+        if (!passwordSignInResult.Succeeded)
+        { 
+            _notificator.Add("UserName", "login ou senha inválidos");
+        }
     }
     
     public async Task SignOut()
