@@ -1,0 +1,46 @@
+﻿@model List<PontoCerto.Domain.Queries.Empresa.ColaboradorVm>
+
+@{
+    ViewBag.Title = "Colaboradores";
+    Layout = "_Layout";
+}
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">Data de nascimento</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">UserName</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model.Any())
+    {
+        foreach (var colaborador in Model)
+        {
+            <tr>
+                <th scope="row">@colaborador.Nome</th>
+                <td>@colaborador.DataNascimento</td>
+                <td>@colaborador.Email</td>
+                <td>@colaborador.UserName</td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <th scope="row" colspan="4" class="text-center">
+                Você não possui colaboradores
+            </th>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div class="card">
+    <div class="card-body">
+        <button type="button" class="btn btn-primary">Cadastrar</button>
+        <button disabled type="button" class="btn btn-success">Cadastrar via csv</button>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using PontoCerto.Domain.Notifications;
+using PontoCerto.Domain.ValueObjects;
 using PontoCerto.WebApplication.Infrastructure.Configurations;
 
 namespace PontoCerto.WebApplication.Infrastructure.Security;
@@ -34,7 +35,24 @@ public class IdentityService : IIdentityService
         return user == null ? string.Empty : user.Id;
     }
 
-    public async Task Register(string userName, string password)
+    public async Task<string> GetUserName(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            return string.Empty;
+        }
+
+        var user = await _userManager.FindByIdAsync(id);
+
+        if (user == null || string.IsNullOrWhiteSpace(user.UserName))
+        {
+            return string.Empty;
+        }
+        
+        return user.UserName;
+    }
+
+    public async Task Register(string userName, string password, string role)
     {
         //todo: criar teste
         if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
@@ -42,6 +60,11 @@ public class IdentityService : IIdentityService
             _notificator.Add("UserName", "Login inválido");
             _notificator.Add("Password", "Senha inválida");
             return;
+        }
+
+        if (string.IsNullOrWhiteSpace(role))
+        {
+            throw new Exception("não enviou role");
         }
         
         var identityUser = new IdentityUser(userName);
@@ -56,7 +79,7 @@ public class IdentityService : IIdentityService
             return;
         }
 
-        var addToRoleResult = await _userManager.AddToRoleAsync(identityUser, Roles.Padrao);
+        var addToRoleResult = await _userManager.AddToRoleAsync(identityUser, role);
 
         if (!addToRoleResult.Succeeded)
         {

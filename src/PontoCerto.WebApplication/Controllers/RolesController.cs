@@ -15,7 +15,6 @@ public class RolesController : Controller
         _dbContext = dbContext;
     }
 
-    // GET
     public async Task<IActionResult> Index()
     {
         var roles = await _dbContext.Roles.ToListAsync();

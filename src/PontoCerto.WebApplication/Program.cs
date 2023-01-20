@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Repositories;
 using PontoCerto.Domain.Services;
@@ -30,13 +31,17 @@ builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<INotificator, Notificator>();
+builder.Services.AddScoped<IColaboradorRepository, ColaboradorRepository>();
+
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-    options.LoginPath = "/Account/Login";
+    options.LoginPath = "/Account/SignIn";
     //options.AccessDeniedPath = "/Account/AccessDenied";
     options.SlidingExpiration = true;
 });

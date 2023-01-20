@@ -1,7 +1,12 @@
 namespace PontoCerto.Domain.ValueObjects;
 
-public struct Nome
+public class Nome
 {
+    protected Nome()
+    {
+        
+    }
+    
     public Nome(string primeiroNome, string ultimoNome)
     {
         PrimeiroNome = primeiroNome;
@@ -10,4 +15,5 @@ public struct Nome
 
     public string PrimeiroNome { get; private set; }
     public string UltimoNome { get; private set; }
+    public string NomeCompleto => $"{PrimeiroNome} {UltimoNome}";
 }
