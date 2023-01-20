@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PontoCerto.Domain.Commands;
 using PontoCerto.Domain.Services;
 using PontoCerto.WebApplication.Infrastructure.Extensions;
+using PontoCerto.WebApplication.Models.Empresa;
 
 namespace PontoCerto.WebApplication.Controllers;
 
@@ -24,5 +26,29 @@ public class EmpresaController : Controller
         var viewModel = query.Colaboradores;
         
         return View(viewModel);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> RegistrarColaborador()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RegistrarColaborador(RegistrarColaboradorDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(dto);
+        }
+
+        var empresaId = User.GetLoggedInUserId<string>();
+
+        var command = new RegistrarColaboradorCommand(dto.PrimeiroNome, dto.UltimoNome,
+            dto.DataNascimento, dto.Email, new Guid(empresaId));
+
+        await _empresaService.RegistrarColaborador(command);
+        
+        return RedirectToAction(nameof(Colaboradores));
     }
 }

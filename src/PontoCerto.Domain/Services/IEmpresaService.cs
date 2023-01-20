@@ -8,7 +8,7 @@ public interface IEmpresaService
     Task Registrar(RegistrarEmpresaCommand command);
     Task<ObterColaboradoresQuery> ObterColaboradores(string empresaId);
     Task ObterColaborador();
-    Task RegistrarColaborador();
+    Task RegistrarColaborador(RegistrarColaboradorCommand command);
     Task RegistrarColaboradores();
     Task AtualizarColaborador();
 }

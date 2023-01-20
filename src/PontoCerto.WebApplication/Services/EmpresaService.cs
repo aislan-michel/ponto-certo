@@ -77,9 +77,25 @@ public class EmpresaService : IEmpresaService
         throw new NotImplementedException();
     }
 
-    public Task RegistrarColaborador()
+    public async Task RegistrarColaborador(RegistrarColaboradorCommand command)
     {
-        throw new NotImplementedException();
+        var usuario = new Usuario($"{command.Email.Split("@").First()}@pontocerto.com.br" , "Teste@123", Role.Colaborador);
+
+        await _identityService.Register(usuario);
+
+        if (_notificator.HaveNotifications())
+        {
+            return;
+        }
+
+        var usuarioId = await _identityService.GetUserId(usuario.UserName);
+        
+        var colaborador = new Colaborador(new Nome(command.PrimeiroNome, command.UltimoNome),
+            command.DataNascimento, command.Email, command.EmpresaId, new Guid(usuarioId));
+        
+        _colaboradorRepository.Adicionar(colaborador);
+
+        await _colaboradorRepository.Salvar();
     }
 
     public Task RegistrarColaboradores()

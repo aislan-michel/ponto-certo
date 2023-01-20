@@ -20,6 +20,8 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
     {
         modelBuilder.ApplyConfiguration(new EmpresaConfiguration());
         modelBuilder.ApplyConfiguration(new ColaboradorConfiguration());
+
+        modelBuilder.Ignore<Usuario>();
         
         base.OnModelCreating(modelBuilder);
     }

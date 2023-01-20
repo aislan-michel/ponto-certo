@@ -72,9 +72,14 @@ public class AccountController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> SignIn(SignInDto user)
+    public async Task<IActionResult> SignIn(SignInDto dto)
     {
-        await _identityService.SignIn(user.UserName, user.Password);
+        if (!ModelState.IsValid)
+        {
+            return View(dto);
+        }
+        
+        await _identityService.SignIn(dto.UserName, dto.Password);
         
         return RedirectToAction("Index", "Home");
     }

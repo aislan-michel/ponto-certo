@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using PontoCerto.Domain.Entities;
 using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.ValueObjects;
 using PontoCerto.WebApplication.Infrastructure.Configurations;
@@ -87,6 +88,11 @@ public class IdentityService : IIdentityService
             _logger.LogError("identity lib: {mensagens}", mensagens);
             _notificator.Add("UserName", "Falha ao adicionar permissões do usuário");
         }
+    }
+
+    public async Task Register(Usuario usuario)
+    {
+        await Register(usuario.UserName, usuario.RawPassword, usuario.Role);
     }
     
     public async Task SignIn(string userName, string password)

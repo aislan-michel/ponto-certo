@@ -19,4 +19,14 @@ public class ColaboradorRepository : IColaboradorRepository
             .Where(x => x.EmpresaId == new Guid(empresaId))
             .ToListAsync();
     }
+
+    public void Adicionar(Colaborador colaborador)
+    {
+        _myDbContext.Colaboradores.Add(colaborador);
+    }
+
+    public async Task Salvar()
+    {
+        await _myDbContext.SaveChangesAsync();
+    }
 }
