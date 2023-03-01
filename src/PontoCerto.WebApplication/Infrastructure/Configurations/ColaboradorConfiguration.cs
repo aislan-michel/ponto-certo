@@ -10,7 +10,6 @@ public class ColaboradorConfiguration : IEntityTypeConfiguration<Colaborador>
     {
         builder.HasKey(x => x.Id);
         
-        //builder.Property(x => x.Nome).IsRequired().HasColumnType("varchar(120)");
         builder.OwnsOne(x => x.Nome, y =>
         {
             y.Property(x => x.PrimeiroNome).IsRequired().HasColumnType("varchar(120)");

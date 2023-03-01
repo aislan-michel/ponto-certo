@@ -13,6 +13,6 @@ public class Contato
         Telefones = telefones;
     }
 
-    public IEnumerable<string> Emails { get; set; }
-    public IEnumerable<string> Telefones { get; set; }
+    public IEnumerable<string> Emails { get; set; } = new List<string>();
+    public IEnumerable<string> Telefones { get; set; } = new List<string>();
 }

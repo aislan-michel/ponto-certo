@@ -18,13 +18,13 @@ public class Empresa
         UsuarioId = usuarioId;
     }
 
-    public Guid Id { get; set; }
+    public Guid Id { get; private set; }
     public string Nome { get; private set; }
-    public string Cnpj { get; private set; }
+    public string Cnpj { get; set; }
     public int QuantidadeFuncionarios { get; private set; }
-    public string Segmento { get; private set; }
-    public Contato Contato { get; private set; }
-    public Endereco Endereco { get; private set; }
-    public IEnumerable<Colaborador> Colaboradores { get; private set; }
+    public string? Segmento { get; private set; } = null;
+    public Contato Contato { get; private set; } = new();
+    public Endereco Endereco { get; private set; } = new();
+    public IEnumerable<Colaborador> Colaboradores { get; private set; } = new List<Colaborador>();
     public string UsuarioId { get; private set; }
 }

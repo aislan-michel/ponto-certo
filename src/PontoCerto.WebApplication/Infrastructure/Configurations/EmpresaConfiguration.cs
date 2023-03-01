@@ -24,8 +24,8 @@ public class EmpresaConfiguration : IEntityTypeConfiguration<Empresa>
         builder.Property(x => x.Segmento).HasColumnType("varchar(100)");
         builder.Ignore(x => x.Contato);
         builder.Ignore(x => x.Colaboradores);
-        builder.Property(x => x.UsuarioId).IsRequired().HasColumnType("varchar(255)");;
-
+        builder.Property(x => x.UsuarioId).IsRequired().HasColumnType("varchar(255)");
+        
         builder.ToTable("Empresas");
     }
 }

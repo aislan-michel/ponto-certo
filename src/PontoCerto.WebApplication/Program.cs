@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using PontoCerto.Domain.Entities;
 using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Repositories;
 using PontoCerto.Domain.Services;
@@ -16,7 +17,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<MyDbContext>(options =>
 {
-    var connection = $"server=localhost;port=3308;userid=root;password=numsey;database=ponto-certo";;
+    const string connection = "server=localhost;port=3308;userid=root;password=numsey;database=ponto-certo";
 
     options.UseMySql(connection, ServerVersion.AutoDetect(connection));
 });
@@ -52,6 +53,48 @@ builder.Services.Configure<PasswordHasherOptions>(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<MyDbContext>();
+
+    var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+
+    if (pendingMigrations.Any())
+    {
+        await context.Database.MigrateAsync();
+
+        const string padrao = "padrao";
+        const string empresa = "empresa";
+        const string admin = "admin";
+        const string colaborador = "colaborador";
+        
+        context.Roles.AddRange(new List<IdentityRole>(2)
+        {
+            new(padrao){NormalizedName = padrao.ToUpper()},
+            new(empresa){NormalizedName = empresa.ToUpper()},
+            new(admin){NormalizedName = admin.ToUpper()},
+            new(colaborador){NormalizedName = colaborador.ToUpper()}
+        });
+
+        await context.SaveChangesAsync();
+
+        var identityUser = new IdentityUser("ponto.certo@admin");
+
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        
+        await userManager.CreateAsync(identityUser, "Teste@123");
+        await userManager.AddToRoleAsync(identityUser, admin);
+
+        var usuario = await userManager.FindByNameAsync("ponto.certo@admin");
+
+        context.Empresas.Add(new Empresa("Ponto Certo Inc.", "00000000000000", 1, usuario.Id));
+        
+        await context.SaveChangesAsync();
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

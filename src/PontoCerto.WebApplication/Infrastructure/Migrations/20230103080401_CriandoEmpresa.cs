@@ -24,19 +24,19 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
                     Cnpj = table.Column<string>(type: "varchar(14)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     QuantidadeFuncionarios = table.Column<int>(type: "int", nullable: false),
-                    Segmento = table.Column<string>(type: "varchar(100)", nullable: false)
+                    Segmento = table.Column<string>(type: "varchar(100)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Logradouro = table.Column<string>(type: "varchar(200)", nullable: false)
+                    Logradouro = table.Column<string>(type: "varchar(200)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Numero = table.Column<string>(type: "varchar(5)", nullable: false)
+                    Numero = table.Column<string>(type: "varchar(5)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Bairro = table.Column<string>(type: "varchar(100)", nullable: false)
+                    Bairro = table.Column<string>(type: "varchar(100)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Cidade = table.Column<string>(type: "varchar(100)", nullable: false)
+                    Cidade = table.Column<string>(type: "varchar(100)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Estado = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Estado = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Cep = table.Column<string>(type: "varchar(8)", nullable: false)
+                    Cep = table.Column<string>(type: "varchar(8)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UsuarioId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")

@@ -19,5 +19,5 @@ E se o colaborador x for mandado embora?
   5. Afastado
 
 Como funciona o cadastro da empresa?
-* A impresa irá preencher um formulário, será gerado um login e os dados persistidos.
+* A empresa irá preencher um formulário, será gerado um login e os dados persistidos.
   

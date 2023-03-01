@@ -13,7 +13,7 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
             
     }
 
-    public DbSet<Empresa> Empresas { get; set; }
+    public DbSet<Empresa> Empresas { get; set; } 
     public DbSet<Colaborador> Colaboradores { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

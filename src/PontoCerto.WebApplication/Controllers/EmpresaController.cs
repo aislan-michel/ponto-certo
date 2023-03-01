@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PontoCerto.Domain.Commands;
+using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Services;
 using PontoCerto.WebApplication.Infrastructure.Extensions;
 using PontoCerto.WebApplication.Models.Empresa;
@@ -11,25 +12,42 @@ namespace PontoCerto.WebApplication.Controllers;
 public class EmpresaController : Controller
 {
     private readonly IEmpresaService _empresaService;
+    private readonly INotificator _notificator;
+    private readonly ILogger<EmpresaController> _logger;
 
-    public EmpresaController(IEmpresaService empresaService)
+    public EmpresaController(
+        IEmpresaService empresaService, 
+        INotificator notificator, 
+        ILogger<EmpresaController> logger)
     {
         _empresaService = empresaService;
+        _notificator = notificator;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Colaboradores()
     {
-        var empresaId = User.GetLoggedInUserId<string>();
-        
-        var query = await _empresaService.ObterColaboradores(empresaId);
+        try
+        {
+            var usuarioId = User.GetLoggedInUserId<string>();
 
-        var viewModel = query.Colaboradores;
+            var empresaId = await _empresaService.ObterId(usuarioId);
         
-        return View(viewModel);
+            var query = await _empresaService.ObterColaboradores(empresaId);
+
+            var viewModel = query.Colaboradores;
+        
+            return View(viewModel);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "");
+            throw;
+        }
     }
 
     [HttpGet]
-    public async Task<IActionResult> RegistrarColaborador()
+    public IActionResult RegistrarColaborador()
     {
         return View();
     }
@@ -42,13 +60,25 @@ public class EmpresaController : Controller
             return View(dto);
         }
 
-        var empresaId = User.GetLoggedInUserId<string>();
+        var usuarioId = User.GetLoggedInUserId<string>();
+
+        var empresaId = await _empresaService.ObterId(usuarioId);
 
         var command = new RegistrarColaboradorCommand(dto.PrimeiroNome, dto.UltimoNome,
             dto.DataNascimento, dto.Email, new Guid(empresaId));
 
         await _empresaService.RegistrarColaborador(command);
+
+        if (!_notificator.HaveNotifications())
+        {
+            return RedirectToAction(nameof(Colaboradores));
+        }
         
-        return RedirectToAction(nameof(Colaboradores));
+        foreach (var (key, value) in _notificator.GetDictionary())
+        {
+            ModelState.AddModelError(key, value);
+        }
+
+        return View(dto);
     }
 }

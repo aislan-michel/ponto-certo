@@ -6,7 +6,6 @@
 }
 
 <form method="post" asp-action="SignIn">
-    
     <div class="mb-3">
         @Html.LabelFor(x => x.UserName, new {@class = "form-label"})
         @Html.TextBoxFor(x => x.UserName, new {@class = "form-control"})
@@ -19,6 +18,5 @@
         @Html.ValidationMessageFor(x => x.Password, "", new {@class = "invalid-feedback"})
     </div>
 
-    <button type="submit" class="btn btn-primary">Enviar</button>
-
+    <button type="submit" class="btn btn-primary">Entrar</button>
 </form>

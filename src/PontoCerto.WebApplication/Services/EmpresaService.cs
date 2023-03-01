@@ -27,6 +27,13 @@ public class EmpresaService : IEmpresaService
         _colaboradorRepository = colaboradorRepository;
     }
 
+    public async Task<string> ObterId(string usuarioId)
+    {
+        var empresa = await _empresaRepository.ObterId(usuarioId);
+
+        return empresa.Id.ToString();
+    }
+    
     public async Task Registrar(RegistrarEmpresaCommand command)
     {
         await _identityService.Register(command.UserName, command.Senha, Role.Empresa);
@@ -65,8 +72,9 @@ public class EmpresaService : IEmpresaService
         {
             var dataNascimento = colaborador.DataNascimento.ToString("dd/MM/yyyy");
             var userName = await _identityService.GetUserName(colaborador.UsuarioId.ToString());
-            
-            query.Colaboradores.Add(new ColaboradorVm(colaborador.Nome.NomeCompleto, dataNascimento, colaborador.Email, userName));
+            var empresa = await _empresaRepository.ObterNome(colaborador.EmpresaId);
+
+            query.Colaboradores.Add(new ColaboradorVm(colaborador.Nome.NomeCompleto, empresa.Nome, dataNascimento, colaborador.Email, userName));
         }
 
         return query;
