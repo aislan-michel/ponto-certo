@@ -1,21 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 using PontoCerto.Domain.Entities;
+using PontoCerto.Domain.Queries;
 using PontoCerto.Domain.Repositories;
+using PontoCerto.WebApplication.Infrastructure.Security;
 
 namespace PontoCerto.WebApplication.Infrastructure.Repositories;
 
 public class EmpresaRepository : IEmpresaRepository
 {
     private readonly MyDbContext _myDbContext;
+    private readonly IIdentityService _identityService;
 
-    public EmpresaRepository(MyDbContext myDbContext)
+    public EmpresaRepository(MyDbContext myDbContext, IIdentityService identityService)
     {
         _myDbContext = myDbContext;
+        _identityService = identityService;
     }
 
-    public async Task<IEnumerable<Empresa>> Obter()
+    public async Task<ObterEmpresasQuery> Obter()
     {
-        return await _myDbContext.Empresas.ToListAsync();
+        var query = new ObterEmpresasQuery();
+
+        var empresas = await _myDbContext.Empresas.ToListAsync();
+
+        foreach (var empresa in empresas)
+        {
+            var userName = await _identityService.GetUserName(empresa.UsuarioId);
+
+            query.Empresas.Add(new EmpresaVm(empresa.Nome, empresa.Cnpj, empresa.QuantidadeFuncionarios, userName));
+        }
+
+        return query;
     }
 
     public async Task<Empresa> ObterId(string usuarioId)

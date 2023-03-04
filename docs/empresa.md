@@ -1,3 +1,6 @@
+A empresa é a entidade responsável pelo seus colaboradores. 
+
+
 #### Funcionalidades:
 * Efetuar registro e login.
 * Visualizar a lista de colaboradores.

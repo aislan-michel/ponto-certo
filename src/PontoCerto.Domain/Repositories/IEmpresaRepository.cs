@@ -1,10 +1,11 @@
 using PontoCerto.Domain.Entities;
+using PontoCerto.Domain.Queries;
 
 namespace PontoCerto.Domain.Repositories;
 
 public interface IEmpresaRepository
 {
-    Task<IEnumerable<Empresa>> Obter();
+    Task<ObterEmpresasQuery> Obter();
     Task<Empresa> ObterId(string usuarioId);
     Task<IEnumerable<Empresa>> ObterColaboradores(long id);
     Task<Empresa> ObterColaborador(long colaboradorId);

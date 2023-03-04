@@ -14,8 +14,8 @@ public class Usuario
         Role = role;
     }
 
-    public string Id { get; set; }
-    public string UserName { get; set; }
-    public string RawPassword { get; set; }
-    public string Role { get; set; }
+    public string Id { get; private set; } = string.Empty;
+    public string UserName { get; private set; }
+    public string RawPassword { get; private set; }
+    public string Role { get; private set; }
 }

@@ -24,5 +24,5 @@ public class Colaborador
     public DateTime DataNascimento { get; private set; }
     public string Email { get; private set; }
     public Guid EmpresaId { get; private set; }
-    public Guid UsuarioId { get; set; }
+    public Guid UsuarioId { get; private set; }
 }

@@ -23,7 +23,9 @@ public class AdminController : Controller
     {
         var empresas = await _empresaRepository.Obter();
 
-        return View(empresas.Select(x => new EmpresaDto(x.Nome, x.Cnpj, x.QuantidadeFuncionarios)));
+        var dto = empresas.Empresas.Select(x => new EmpresaDto(x.Nome, x.Cnpj, x.QuantidadeFuncionarios, x.UserName));
+
+        return View(dto);
     }
     
     public async Task<IActionResult> PerfisDeAcesso()

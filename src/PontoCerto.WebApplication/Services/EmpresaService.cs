@@ -87,6 +87,8 @@ public class EmpresaService : IEmpresaService
 
     public async Task RegistrarColaborador(RegistrarColaboradorCommand command)
     {
+        //todo: concatenar conteudo do email antes do '@' + @ + nome d1a empresa em letras minusculas e tudo junto + .com.br 
+        
         var usuario = new Usuario($"{command.Email.Split("@").First()}@pontocerto.com.br" , "Teste@123", Role.Colaborador);
 
         await _identityService.Register(usuario);

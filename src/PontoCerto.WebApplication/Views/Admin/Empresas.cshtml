@@ -1,9 +1,21 @@
-﻿@model IEnumerable<PontoCerto.WebApplication.Models.Admin.EmpresaDto> 
+﻿@using PontoCerto.WebApplication.Infrastructure.Extensions
+@model IEnumerable<PontoCerto.WebApplication.Models.Admin.EmpresaDto> 
 
 @{
     ViewBag.Title = "Empresas";
     Layout = "_Layout";
 }
+
+<div class="card mb-3">
+    <div class="card-body">
+        <button disabled type="button" class="btn btn-primary" asp-action="">
+            Registrar uma única empresa
+        </button>
+        <button disabled type="button" class="btn btn-success">
+            Registrar várias empresas via planilha csv
+        </button>
+    </div>
+</div>
 
 <div class="table-responsive">
     <table class="table table-bordered">
@@ -12,6 +24,7 @@
             <th scope="col">Nome</th>
             <th scope="col">Cnpj</th>
             <th scope="col">Quantidade de funcionários</th>
+            <th scope="col">UserName</th>
         </tr>
         </thead>
         <tbody>
@@ -21,8 +34,9 @@
             {
                 <tr>
                     <td>@empresa.Nome</td>
-                    <td>@empresa.Cnpj</td>
+                    <td>@empresa.Cnpj.FormatarCnpj()</td>
                     <td>@empresa.QuantidadeFuncionarios</td>
+                    <td>@empresa.UserName</td>
                 </tr>
             }
         }

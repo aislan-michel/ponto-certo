@@ -1,8 +1,13 @@
-﻿namespace PontoCerto.WebApplication.Models.Admin;
+﻿namespace PontoCerto.Domain.Queries;
 
-public class EmpresaDto
+public class ObterEmpresasQuery
 {
-    public EmpresaDto(string nome, string cnpj, int quantidadeFuncionarios, string userName)
+    public List<EmpresaVm> Empresas { get; set; } = new();
+}
+
+public class EmpresaVm
+{
+    public EmpresaVm(string nome, string cnpj, int quantidadeFuncionarios, string userName)
     {
         Nome = nome;
         Cnpj = cnpj;

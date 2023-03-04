@@ -13,6 +13,6 @@ public class RegistroDePonto
         Registro = registro;
     }
 
-    public Guid ColaboradorId { get; private set; }
-    public DateTime Registro { get; private set; }
+    public Guid ColaboradorId { get; private set; } = Guid.Empty;
+    public DateTime Registro { get; private set; } = DateTime.MinValue;
 }
