@@ -77,7 +77,16 @@ public class EmpresaRepository : IEmpresaRepository
 
     public async Task<Empresa> ObterNome(Guid empresaId)
     {
-        return await _myDbContext.Empresas.FirstOrDefaultAsync(x => x != null && x.Id == empresaId);
+        return await _myDbContext.Empresas
+            .Where(x => x.Id == empresaId).Select(x => new Empresa(x.Id, x.Nome))
+            .FirstOrDefaultAsync() ?? throw new InvalidOperationException();
+    }
+    
+    public async Task<Empresa> ObterNome(string empresaId)
+    {
+        return await _myDbContext.Empresas
+            .Where(x => x.Id == new Guid(empresaId)).Select(x => new Empresa(x.Id, x.Nome))
+            .FirstOrDefaultAsync() ?? throw new InvalidOperationException();
     }
 
     public void Adicionar(Empresa empresa)

@@ -41,7 +41,7 @@ public class EmpresaController : Controller
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "");
+            _logger.LogError(e, "Falha ao obter lista de colaboradores");
             throw;
         }
     }

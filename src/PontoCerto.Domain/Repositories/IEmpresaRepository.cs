@@ -14,6 +14,7 @@ public interface IEmpresaRepository
     Task CadastrarColaboradores(IEnumerable<Colaborador> colaboradores);
     Task AtualizarStatusColaborador(long colaboradorId);
     Task<Empresa> ObterNome(Guid empresaId);
+    Task<Empresa> ObterNome(string empresaId);
     void Adicionar(Empresa empresa);
     Task Salvar();
 }

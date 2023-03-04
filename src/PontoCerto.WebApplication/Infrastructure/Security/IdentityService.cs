@@ -2,8 +2,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using PontoCerto.Domain.Entities;
 using PontoCerto.Domain.Notifications;
-using PontoCerto.Domain.ValueObjects;
-using PontoCerto.WebApplication.Infrastructure.Configurations;
 
 namespace PontoCerto.WebApplication.Infrastructure.Security;
 

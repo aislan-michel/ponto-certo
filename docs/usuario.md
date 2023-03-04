@@ -1,4 +1,4 @@
-O usuário é o registro de acesso que a empresa, colaborador e administrador do sistema utilizam para acessar as funcionalidades. 
+O usuário é a identidade da empresa, colaborador e administrador no sistema. 
 Ele é composto pelas seguintes propriedades:
 
 * Id

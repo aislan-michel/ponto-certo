@@ -54,25 +54,25 @@ public class EmpresaService : IEmpresaService
 
     public async Task<ObterColaboradoresQuery> ObterColaboradores(string empresaId)
     {
-        var query = new ObterColaboradoresQuery();
-
         if (string.IsNullOrWhiteSpace(empresaId))
         {
-            return query;
+            return new ObterColaboradoresQuery();
         }
         
         var colaboradores = await _colaboradorRepository.Obter(empresaId);
 
         if (!colaboradores.Any())
         {
-            return query;
+            return new ObterColaboradoresQuery();
         }
+        
+        var query = new ObterColaboradoresQuery();
+        var empresa = await _empresaRepository.ObterNome(empresaId);
         
         foreach (var colaborador in colaboradores)
         {
             var dataNascimento = colaborador.DataNascimento.ToString("dd/MM/yyyy");
             var userName = await _identityService.GetUserName(colaborador.UsuarioId.ToString());
-            var empresa = await _empresaRepository.ObterNome(colaborador.EmpresaId);
 
             query.Colaboradores.Add(new ColaboradorVm(colaborador.Nome.NomeCompleto, empresa.Nome, dataNascimento, colaborador.Email, userName));
         }
