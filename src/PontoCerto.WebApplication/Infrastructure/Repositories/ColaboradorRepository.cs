@@ -13,6 +13,19 @@ public class ColaboradorRepository : IColaboradorRepository
         _myDbContext = myDbContext;
     }
 
+    public async Task<Colaborador> ObterId(string usuarioId)
+    {
+        return await _myDbContext.Colaboradores
+            .Where(x => x.UsuarioId == new Guid(usuarioId)).Select(x => new Colaborador(x.Id)).FirstOrDefaultAsync() 
+               ?? throw new InvalidOperationException();
+    }
+
+    public async Task<Colaborador> ObterId(Guid usuarioId)
+    {
+        return await _myDbContext.Colaboradores.Where(x => x.UsuarioId == usuarioId).Select(x => new Colaborador(x.Id)).FirstOrDefaultAsync() 
+               ?? throw new InvalidOperationException();
+    }
+
     public async Task<IEnumerable<Colaborador>> Obter(string empresaId)
     {
         return await _myDbContext.Colaboradores

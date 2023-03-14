@@ -1,4 +1,4 @@
-using PontoCerto.Domain.Commands;
+using PontoCerto.Domain.Commands.Empresa;
 using PontoCerto.Domain.Entities;
 using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Queries.Empresa;
@@ -52,21 +52,21 @@ public class EmpresaService : IEmpresaService
         await _empresaRepository.Salvar();
     }
 
-    public async Task<ObterColaboradoresQuery> ObterColaboradores(string empresaId)
+    public async Task<ObterColaboradoresQueryResult> ObterColaboradores(string empresaId)
     {
         if (string.IsNullOrWhiteSpace(empresaId))
         {
-            return new ObterColaboradoresQuery();
+            return new ObterColaboradoresQueryResult();
         }
         
         var colaboradores = await _colaboradorRepository.Obter(empresaId);
 
         if (!colaboradores.Any())
         {
-            return new ObterColaboradoresQuery();
+            return new ObterColaboradoresQueryResult();
         }
         
-        var query = new ObterColaboradoresQuery();
+        var query = new ObterColaboradoresQueryResult();
         var empresa = await _empresaRepository.ObterNome(empresaId);
         
         foreach (var colaborador in colaboradores)

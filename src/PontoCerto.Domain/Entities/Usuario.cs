@@ -15,7 +15,7 @@ public class Usuario
     }
 
     public string Id { get; private set; } = string.Empty;
-    public string UserName { get; private set; }
-    public string RawPassword { get; private set; }
-    public string Role { get; private set; }
+    public string UserName { get; private set; } = string.Empty;
+    public string RawPassword { get; private set; } = string.Empty;
+    public string Role { get; private set; } = string.Empty;
 }

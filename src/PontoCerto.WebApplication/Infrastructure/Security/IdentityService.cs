@@ -56,8 +56,8 @@ public class IdentityService : IIdentityService
         //todo: criar teste
         if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
         {
-            _notificator.Add("UserName", "Login inválido");
-            _notificator.Add("Password", "Senha inválida");
+            _notificator.Add(new Notification("UserName", "Login inválido"));
+            _notificator.Add(new Notification("Password", "Senha inválida"));
             return;
         }
 
@@ -74,7 +74,7 @@ public class IdentityService : IIdentityService
         {
             var mensagens = string.Join("\n", createResult.Errors.Select(x => $"{x.Code} - {x.Description}")); 
             _logger.LogError("identity lib: {mensagens}", mensagens);
-            _notificator.Add("UserName", "Falha ao cadastrar usuário");
+            _notificator.Add(new Notification("UserName", "Falha ao cadastrar usuário"));
             return;
         }
 
@@ -84,7 +84,7 @@ public class IdentityService : IIdentityService
         {
             var mensagens = string.Join("\n", addToRoleResult.Errors.Select(x => $"{x.Code} - {x.Description}")); 
             _logger.LogError("identity lib: {mensagens}", mensagens);
-            _notificator.Add("UserName", "Falha ao adicionar permissões do usuário");
+            _notificator.Add(new Notification("UserName", "Falha ao adicionar permissões do usuário"));
         }
     }
 
@@ -108,14 +108,14 @@ public class IdentityService : IIdentityService
         {
             var mensagens = string.Join("\n", addClaimResult.Errors.Select(x => $"{x.Code} - {x.Description}")); 
             _logger.LogError("identity lib: {mensagens}", mensagens);
-            _notificator.Add("UserName", "Falha ao autenticar usuario");
+            _notificator.Add(new Notification("UserName", "Falha ao autenticar usuario"));
         }
 
         var passwordSignInResult = await _signInManager.PasswordSignInAsync(userName, password, false, false);
 
         if (!passwordSignInResult.Succeeded)
         { 
-            _notificator.Add("UserName", "login ou senha inválidos");
+            _notificator.Add(new Notification("UserName", "login ou senha inválidos"));
         }
     }
     

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PontoCerto.Domain.Commands;
+using PontoCerto.Domain.Commands.Empresa;
 using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Services;
 using PontoCerto.WebApplication.Infrastructure.Extensions;
@@ -33,9 +33,9 @@ public class EmpresaController : Controller
 
             var empresaId = await _empresaService.ObterId(usuarioId);
         
-            var query = await _empresaService.ObterColaboradores(empresaId);
+            var queryResult = await _empresaService.ObterColaboradores(empresaId);
 
-            var viewModel = query.Colaboradores;
+            var viewModel = queryResult.Colaboradores;
         
             return View(viewModel);
         }

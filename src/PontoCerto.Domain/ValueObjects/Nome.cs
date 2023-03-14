@@ -13,7 +13,7 @@ public class Nome
         UltimoNome = ultimoNome;
     }
 
-    public string PrimeiroNome { get; private set; }
-    public string UltimoNome { get; private set; }
+    public string PrimeiroNome { get; private set; } = string.Empty;
+    public string UltimoNome { get; private set; } = string.Empty;
     public string NomeCompleto => $"{PrimeiroNome} {UltimoNome}";
 }

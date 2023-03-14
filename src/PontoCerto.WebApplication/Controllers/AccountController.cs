@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PontoCerto.Domain.Commands;
+using PontoCerto.Domain.Commands.Empresa;
 using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Services;
 using PontoCerto.WebApplication.Infrastructure.Security;

@@ -15,11 +15,13 @@ public class MyDbContext : IdentityDbContext<IdentityUser>
 
     public DbSet<Empresa> Empresas { get; set; } 
     public DbSet<Colaborador> Colaboradores { get; set; }
+    public DbSet<RegistroDePonto> RegistrosDePonto { get; set; }    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new EmpresaConfiguration());
         modelBuilder.ApplyConfiguration(new ColaboradorConfiguration());
+        modelBuilder.ApplyConfiguration(new RegistroDePontoConfiguration());
 
         modelBuilder.Ignore<Usuario>();
         

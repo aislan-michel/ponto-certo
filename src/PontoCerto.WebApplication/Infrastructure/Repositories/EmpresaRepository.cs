@@ -17,9 +17,9 @@ public class EmpresaRepository : IEmpresaRepository
         _identityService = identityService;
     }
 
-    public async Task<ObterEmpresasQuery> Obter()
+    public async Task<ObterEmpresasQueryResult> Obter()
     {
-        var query = new ObterEmpresasQuery();
+        var query = new ObterEmpresasQueryResult();
 
         var empresas = await _myDbContext.Empresas.ToListAsync();
 

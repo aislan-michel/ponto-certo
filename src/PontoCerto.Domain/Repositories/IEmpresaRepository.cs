@@ -5,7 +5,7 @@ namespace PontoCerto.Domain.Repositories;
 
 public interface IEmpresaRepository
 {
-    Task<ObterEmpresasQuery> Obter();
+    Task<ObterEmpresasQueryResult> Obter();
     Task<Empresa> ObterId(string usuarioId);
     Task<IEnumerable<Empresa>> ObterColaboradores(long id);
     Task<Empresa> ObterColaborador(long colaboradorId);

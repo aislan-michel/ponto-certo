@@ -29,10 +29,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 }).AddEntityFrameworkStores<MyDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
+builder.Services.AddScoped<IColaboradorSerivce, ColaboradorService>();
+
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
-builder.Services.AddScoped<IIdentityService, IdentityService>();
-builder.Services.AddScoped<INotificator, Notificator>();
 builder.Services.AddScoped<IColaboradorRepository, ColaboradorRepository>();
+builder.Services.AddScoped<IRegistroDePontoRepository, RegistroDePontoRepository>();
+
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<INotificator>(x => new Notificator(new List<Notification>(0)));
+
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpContextAccessor();
@@ -66,14 +71,12 @@ using (var scope = app.Services.CreateScope())
     {
         await context.Database.MigrateAsync();
 
-        const string padrao = "padrao";
         const string empresa = "empresa";
         const string admin = "admin";
         const string colaborador = "colaborador";
         
-        context.Roles.AddRange(new List<IdentityRole>(2)
+        context.Roles.AddRange(new List<IdentityRole>(3)
         {
-            new(padrao){NormalizedName = padrao.ToUpper()},
             new(empresa){NormalizedName = empresa.ToUpper()},
             new(admin){NormalizedName = admin.ToUpper()},
             new(colaborador){NormalizedName = colaborador.ToUpper()}

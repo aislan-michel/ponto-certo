@@ -25,7 +25,7 @@ public class Empresa
     }
 
     public Guid Id { get; private set; }
-    public string Nome { get; private set; }
+    public string Nome { get; private set; } = string.Empty;
     public string Cnpj { get; set; } = string.Empty;
     public int QuantidadeFuncionarios { get; private set; }
     public string? Segmento { get; private set; } = null;

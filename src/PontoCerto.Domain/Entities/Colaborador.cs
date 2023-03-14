@@ -8,6 +8,11 @@ public class Colaborador
     {
         
     }
+
+    public Colaborador(Guid id)
+    {
+        Id = id;
+    }
     
     public Colaborador(Nome nome, DateTime dataNascimento, string email, Guid empresaId, Guid usuarioId)
     {
@@ -20,9 +25,9 @@ public class Colaborador
     }
 
     public Guid Id { get; private set; }
-    public Nome Nome { get; private set; }
+    public Nome Nome { get; private set; } = new Nome("", "");
     public DateTime DataNascimento { get; private set; }
-    public string Email { get; private set; }
+    public string Email { get; private set; } = string.Empty;
     public Guid EmpresaId { get; private set; }
     public Guid UsuarioId { get; private set; }
 }

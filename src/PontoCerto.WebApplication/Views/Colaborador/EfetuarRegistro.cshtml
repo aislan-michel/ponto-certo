@@ -1,6 +1,21 @@
-﻿@{
+﻿@model PontoCerto.WebApplication.Models.Colaborador.EfetuarRegistroDto
+@{
     ViewBag.Title = "Efetuar registro";
     Layout = "_Layout";
 }
 
-oi
+<form method="post" asp-action="EfetuarRegistro">
+    <div class="mb-3 form-group">
+        @Html.LabelFor(x => x.UserName, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.UserName, "", new { @class = "form-control", @readonly = true })
+    </div>
+
+    <div class="mb-3 form-group">
+        @Html.LabelFor(x => x.Marcacao, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Marcacao, "", new { @class = "form-control", @readonly = true })
+    </div>
+    
+    @Html.HiddenFor(x => x.UsuarioId);
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>

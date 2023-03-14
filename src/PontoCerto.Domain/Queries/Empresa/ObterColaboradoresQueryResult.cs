@@ -1,6 +1,6 @@
 ﻿namespace PontoCerto.Domain.Queries.Empresa;
 
-public class ObterColaboradoresQuery
+public class ObterColaboradoresQueryResult
 {
     public List<ColaboradorVm> Colaboradores { get; set; } = new();
 }

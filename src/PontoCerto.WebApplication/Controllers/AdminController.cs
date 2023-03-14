@@ -21,9 +21,9 @@ public class AdminController : Controller
 
     public async Task<IActionResult> Empresas()
     {
-        var empresas = await _empresaRepository.Obter();
+        var queryResult = await _empresaRepository.Obter();
 
-        var dto = empresas.Empresas.Select(x => new EmpresaDto(x.Nome, x.Cnpj, x.QuantidadeFuncionarios, x.UserName));
+        var dto = queryResult.Empresas.Select(x => new EmpresaDto(x.Nome, x.Cnpj, x.QuantidadeFuncionarios, x.UserName));
 
         return View(dto);
     }

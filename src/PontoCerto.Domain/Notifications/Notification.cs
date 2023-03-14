@@ -8,6 +8,6 @@ public class Notification
         Message = message;
     }
 
-    public string Key { get; set; }
-    public string Message { get; set; }
+    public string Key { get; private set; }
+    public string Message { get; private set; }
 }

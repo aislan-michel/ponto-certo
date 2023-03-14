@@ -19,10 +19,10 @@ public class Endereco
         Cep = cep;
     }
 
-    public string Logradouro { get; }
-    public string Numero { get; }
-    public string Bairro { get; }
-    public string Cidade { get; }
-    public string Estado { get; }
-    public string Cep { get; set; }
+    public string? Logradouro { get; }
+    public string? Numero { get; }
+    public string? Bairro { get; }
+    public string? Cidade { get; }
+    public string? Estado { get; }
+    public string? Cep { get; set; }
 }

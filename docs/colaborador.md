@@ -9,3 +9,5 @@
 * Data de nascimento
 * E-mail para notificações
 * Qual empresa pertence
+* Cargo
+* Carga horária semanal

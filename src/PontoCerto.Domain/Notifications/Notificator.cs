@@ -2,16 +2,32 @@ namespace PontoCerto.Domain.Notifications;
 
 public class Notificator : INotificator
 {
-    private readonly Dictionary<string, string> _notifications = new();
+    private readonly List<Notification> _notifications;
 
-    public void Add(string key, string message)
+    public Notificator(List<Notification> notifications)
     {
-        _notifications.Add(key, message);
+        _notifications = notifications;
+    }
+
+    public List<Notification> Get()
+    {
+        return _notifications;
     }
 
     public Dictionary<string, string> GetDictionary()
     {
-        return _notifications;
+        return _notifications.ToDictionary(x => x.Key, x => x.Message);
+    }
+
+    public void Add(Notification notification)
+    {
+        _notifications.Add(notification);
+    }
+
+    public void AddRange(List<Notification> notifications)
+    {
+        
+        _notifications.AddRange(notifications);
     }
 
     public bool HaveNotifications()

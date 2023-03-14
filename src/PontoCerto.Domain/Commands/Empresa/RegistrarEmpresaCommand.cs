@@ -1,4 +1,4 @@
-namespace PontoCerto.Domain.Commands;
+namespace PontoCerto.Domain.Commands.Empresa;
 
 public class RegistrarEmpresaCommand
 {

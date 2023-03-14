@@ -1,6 +1,6 @@
 ﻿namespace PontoCerto.Domain.Queries;
 
-public class ObterEmpresasQuery
+public class ObterEmpresasQueryResult
 {
     public List<EmpresaVm> Empresas { get; set; } = new();
 }
