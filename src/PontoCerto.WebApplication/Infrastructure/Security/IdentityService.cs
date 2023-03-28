@@ -2,6 +2,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using PontoCerto.Domain.Entities;
 using PontoCerto.Domain.Notifications;
+using PontoCerto.Domain.Repositories;
+using Claim = System.Security.Claims.Claim;
 
 namespace PontoCerto.WebApplication.Infrastructure.Security;
 
@@ -11,15 +13,17 @@ public class IdentityService : IIdentityService
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly INotificator _notificator;
     private readonly ILogger<IdentityService> _logger;
+    private readonly IColaboradorRepository _colaboradorRepository;
 
     public IdentityService(
         UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
-        INotificator notificator, ILogger<IdentityService> logger)
+        INotificator notificator, ILogger<IdentityService> logger, IColaboradorRepository colaboradorRepository)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _notificator = notificator;
         _logger = logger;
+        _colaboradorRepository = colaboradorRepository;
     }
 
     public async Task<string> GetUserId(string userName)
@@ -102,7 +106,19 @@ public class IdentityService : IIdentityService
             return;
         }
 
-        var addClaimResult = await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Sid, user.Id));
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Sid, user.Id)
+        };
+        
+        var colaborador = await _colaboradorRepository.ObterId(user.Id);
+
+        if (colaborador != null)
+        {
+            claims.Add(new Claim("ColaboradorId", colaborador.Id.ToString()));    
+        }
+
+        var addClaimResult = await _userManager.AddClaimsAsync(user, claims);
 
         if (!addClaimResult.Succeeded)
         {

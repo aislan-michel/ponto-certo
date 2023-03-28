@@ -1,0 +1,47 @@
+﻿@model PontoCerto.Domain.Queries.Colaborador.MeusRegistrosDePontoQueryResult
+
+@{
+    ViewBag.Title = "Meus Registros";
+    Layout = "_Layout";
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <button disabled type="button" class="btn btn-primary" asp-action="">
+            Efetuar registro de ponto
+        </button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr class="table-active">
+            <th scope="col">Colaborador</th>
+            <th scope="col">Registro</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.RegistrosDePonto.Any())
+        {
+            foreach (var registroDePonto in Model.RegistrosDePonto)
+            {
+                <tr>
+                    <td>@registroDePonto.Colaborador</td>
+                    <td>@registroDePonto.Registro</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <th scope="row" colspan="4" class="text-center">
+                    Não há registros
+                </th>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+

@@ -56,8 +56,8 @@ public class ColaboradorController : Controller
 
     public async Task<IActionResult> MeusRegistros()
     {
+        var colaboradorId = User.ObterColaboradorId<string>();
         
-        
-        return View(await _colaboradorSerivce.MeusRegistrosDePonto());
+        return View(await _colaboradorSerivce.MeusRegistrosDePonto(new Guid(colaboradorId)));
     }
 }

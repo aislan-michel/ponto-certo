@@ -25,4 +25,26 @@ public static class ClaimsPrincipalExtensions
 
         throw new Exception("Invalid type provided");
     }
+    
+    public static T ObterColaboradorId<T>(this ClaimsPrincipal principal)
+    {
+        if (principal == null)
+        {
+            throw new ArgumentNullException(nameof(principal));
+        }
+
+        var colaboradorId = principal.FindFirstValue("ColaboradorId");
+
+        if (typeof(T) == typeof(string))
+        {
+            return (T)Convert.ChangeType(colaboradorId, typeof(T));
+        }
+
+        if (typeof(T) == typeof(int) || typeof(T) == typeof(long))
+        {
+            return colaboradorId != null ? (T)Convert.ChangeType(colaboradorId, typeof(T)) : (T)Convert.ChangeType(0, typeof(T));
+        }
+
+        throw new Exception("Invalid type provided");
+    }
 }
