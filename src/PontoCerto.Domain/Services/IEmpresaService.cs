@@ -10,6 +10,6 @@ public interface IEmpresaService
     Task<ObterColaboradoresQueryResult> ObterColaboradores(string empresaId);
     Task ObterColaborador();
     Task RegistrarColaborador(RegistrarColaboradorCommand command);
-    Task RegistrarColaboradores();
+    Task RegistrarColaboradores(IEnumerable<RegistrarColaboradorCommand> commands);
     Task AtualizarColaborador();
 }

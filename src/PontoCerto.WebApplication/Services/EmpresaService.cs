@@ -108,9 +108,12 @@ public class EmpresaService : IEmpresaService
         await _colaboradorRepository.Salvar();
     }
 
-    public Task RegistrarColaboradores()
+    public async Task RegistrarColaboradores(IEnumerable<RegistrarColaboradorCommand> commands)
     {
-        throw new NotImplementedException();
+        foreach (var command in commands)
+        {
+            await RegistrarColaborador(command);
+        }
     }
 
     public Task AtualizarColaborador()

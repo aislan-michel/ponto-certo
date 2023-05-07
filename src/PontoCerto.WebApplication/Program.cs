@@ -6,6 +6,7 @@ using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Repositories;
 using PontoCerto.Domain.Services;
 using PontoCerto.WebApplication.Infrastructure;
+using PontoCerto.WebApplication.Infrastructure.Helpers;
 using PontoCerto.WebApplication.Infrastructure.Repositories;
 using PontoCerto.WebApplication.Infrastructure.Security;
 using PontoCerto.WebApplication.Services;
@@ -37,7 +38,7 @@ builder.Services.AddScoped<IRegistroDePontoRepository, RegistroDePontoRepository
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<INotificator>(x => new Notificator(new List<Notification>(0)));
-
+builder.Services.AddScoped(typeof(ICsvHelper<>), typeof(CsvHelper<>));
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpContextAccessor();

@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="30.0.1" />
       <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.2" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
@@ -19,6 +20,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PontoCerto.Domain\PontoCerto.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\assets" />
     </ItemGroup>
 
 </Project>

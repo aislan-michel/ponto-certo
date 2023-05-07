@@ -10,7 +10,7 @@
         <a type="button" class="btn btn-primary" asp-action="RegistrarColaborador">
             Registrar um único colaborador
         </a>
-        <button disabled type="button" class="btn btn-success">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-importar-csv">
             Registrar vários colaboradores via planilha csv
         </button>
     </div>
@@ -43,7 +43,7 @@
         else
         {
             <tr>
-                <th scope="row" colspan="4" class="text-center">
+                <th scope="row" colspan="5" class="text-center">
                     Você não possui colaboradores
                 </th>
             </tr>
@@ -51,4 +51,48 @@
         </tbody>
     </table>
 </div>
+
+<div class="modal fade" id="modal-importar-csv" tabindex="-1" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Registrar Colaboradores</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" method="post" asp-action="RegistrarColaboradores" id="form-file">
+                    <div>
+                        <label for="formFile" class="form-label">Selecione uma planilha csv</label>
+                        <input class="form-control" type="file" id="formFile" name="Arquivo">
+                        <input hidden type="text" name="EmpresaId" value="@ViewBag.EmpresaId"/>
+                        <small class="form-text text-muted m-1 mt-2">
+                            <ul>
+                                <li>
+                                    <a href="~/assets/cadastrar-colaboradores-v1.csv">clique aqui</a> para baixar nossa planilha modelo    
+                                </li>
+                                <li>
+                                    caso seja notado algum colaborador que ja exista na base, ele não sera cadastrado
+                                </li>
+                            </ul>
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="importar">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $('#importar').on("click", (event) => {
+            $('#importar').prop("disabled", true);
+            $('#form-file').submit();
+        });
+    </script>
+}
 
