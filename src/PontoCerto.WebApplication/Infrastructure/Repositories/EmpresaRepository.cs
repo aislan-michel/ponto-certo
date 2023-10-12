@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PontoCerto.Domain.Entities;
-using PontoCerto.Domain.Queries;
+using PontoCerto.Domain.Queries.Admin;
 using PontoCerto.Domain.Repositories;
 using PontoCerto.WebApplication.Infrastructure.Security;
 

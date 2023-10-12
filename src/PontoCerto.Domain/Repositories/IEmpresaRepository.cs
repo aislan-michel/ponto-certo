@@ -1,5 +1,5 @@
 using PontoCerto.Domain.Entities;
-using PontoCerto.Domain.Queries;
+using PontoCerto.Domain.Queries.Admin;
 
 namespace PontoCerto.Domain.Repositories;
 

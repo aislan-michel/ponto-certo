@@ -6,22 +6,22 @@ namespace PontoCerto.WebApplication.Infrastructure.Helpers;
 
 public class CsvHelper<T> : ICsvHelper<T>
 {
-    private readonly CsvConfiguration _csvConfiguration = new(CultureInfo.CurrentCulture)
-    {
-        NewLine = Environment.NewLine,
-        PrepareHeaderForMatch = args => args.Header.ToLower(),
-        HasHeaderRecord = false,
-        Delimiter = ";"
-    };
+    private readonly CsvConfiguration _csvConfiguration;
 
-    public CsvHelper()
+    public CsvHelper(CsvConfiguration? csvConfiguration)
     {
-        
+        _csvConfiguration = csvConfiguration ?? new CsvConfiguration(CultureInfo.CurrentCulture)
+        {
+            NewLine = Environment.NewLine,
+            PrepareHeaderForMatch = args => args.Header.ToLower(),
+            HasHeaderRecord = false,
+            Delimiter = ";"
+        };
     }
     
-    public List<T> GetRecords(IFormFile file)
+    public IEnumerable<T> GetRecords(IFormFile file)
     {
-        List<T> records;
+        IEnumerable<T> records;
         
         using (var reader = new StreamReader(file.OpenReadStream()))
         {

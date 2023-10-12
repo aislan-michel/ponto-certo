@@ -1,4 +1,4 @@
-@model List<Microsoft.AspNetCore.Identity.IdentityRole>
+@model IEnumerable<PontoCerto.WebApplication.Models.Admin.PerfilDeAcessoDto>
 
 @{
     ViewBag.Title = "Perfis de Acesso";
@@ -9,9 +9,7 @@
         <thead>
         <tr class="table-active">
             <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Normalized Name</th>
-            <th scope="col">ConcurrencyStamp</th>
+            <th scope="col">Nome</th>
         </tr>
         </thead>
         <tbody>
@@ -19,9 +17,7 @@
         {
             <tr>
                 <td>@role.Id</td>
-                <td>@role.Name</td>
-                <td>@role.NormalizedName</td>
-                <td>@role.ConcurrencyStamp</td>
+                <td>@role.Nome</td>
             </tr>
         }
         </tbody>

@@ -72,7 +72,7 @@ public class EmpresaController : Controller
         var empresaId = await _empresaService.ObterId(usuarioId);
 
         var command = new RegistrarColaboradorCommand(dto.PrimeiroNome, dto.UltimoNome,
-            dto.DataNascimento, dto.Email, new Guid(empresaId));
+            dto.DataNascimento, dto.Email, empresaId);
 
         await _empresaService.RegistrarColaborador(command);
 
@@ -105,7 +105,7 @@ public class EmpresaController : Controller
             var csv = _registrarColaboradorCsvHelper.GetRecords(dto.Arquivo);
     
             var colaboradores = csv.Select(x => new RegistrarColaboradorCommand(
-                x.Nome, x.Sobrenome, Convert.ToDateTime(x.DataNascimento), x.Email, dto.EmpresaId));
+                x.Nome, x.Sobrenome, x.DataNascimento, x.Email, dto.EmpresaId));
     
             await _empresaService.RegistrarColaboradores(colaboradores);
 

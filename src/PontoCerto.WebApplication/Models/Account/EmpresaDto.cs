@@ -10,6 +10,6 @@ public class EmpresaDto : RegisterDto
     [Required(ErrorMessage = "Campo obrigatório"), StringLength(14), Display(Name = "CNPJ")]
     public string Cnpj { get; set; }
     
-    [Range(2, int.MaxValue, ErrorMessage = "Valor inválido"), Display(Name = "Quantidade de funcionários")]
+    [Range(2, int.MaxValue, ErrorMessage = "Valor inválido, sua empresa deve ter ao menos 2 funcionários"), Display(Name = "Quantidade de funcionários")]
     public int QuantidadeFuncionarios { get; set; }
 }

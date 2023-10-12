@@ -1,4 +1,4 @@
-﻿namespace PontoCerto.Domain.Queries;
+﻿namespace PontoCerto.Domain.Queries.Admin;
 
 public class ObterEmpresasQueryResult
 {
