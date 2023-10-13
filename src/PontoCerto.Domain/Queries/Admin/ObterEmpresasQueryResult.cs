@@ -2,7 +2,12 @@
 
 public class ObterEmpresasQueryResult
 {
-    public List<EmpresaVm> Empresas { get; set; } = new();
+    public ObterEmpresasQueryResult(IEnumerable<EmpresaVm> empresas)
+    {
+        Empresas = empresas;
+    }
+    
+    public IEnumerable<EmpresaVm> Empresas { get; private set; }
 }
 
 public class EmpresaVm

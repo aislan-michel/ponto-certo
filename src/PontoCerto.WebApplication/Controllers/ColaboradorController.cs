@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PontoCerto.Domain.Commands.Colaborador;
+using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Services;
 using PontoCerto.WebApplication.Infrastructure.Extensions;
 using PontoCerto.WebApplication.Infrastructure.Security;
@@ -12,15 +13,18 @@ public class ColaboradorController : Controller
     private readonly ILogger<ColaboradorController> _logger;
     private readonly IIdentityService _identityService;
     private readonly IColaboradorSerivce _colaboradorSerivce;
+    private readonly INotificator _notificator;
 
     public ColaboradorController(
         ILogger<ColaboradorController> logger,
         IIdentityService identityService, 
-        IColaboradorSerivce colaboradorSerivce)
+        IColaboradorSerivce colaboradorSerivce,
+        INotificator notificator)
     {
         _logger = logger;
         _identityService = identityService;
         _colaboradorSerivce = colaboradorSerivce;
+        _notificator = notificator;
     }
 
     [HttpGet]
@@ -44,8 +48,18 @@ public class ColaboradorController : Controller
             }
 
             await _colaboradorSerivce.EfetuarRegistroDePonto(new EfetuarRegistroDePontoCommand(dto.UsuarioId, dto.UserName, dto.Marcacao));
+            
+            if (!_notificator.HaveNotifications())
+            {
+                return RedirectToAction(nameof(MeusRegistros));
+            }
         
-            return RedirectToAction(nameof(MeusRegistros));
+            foreach (var (key, value) in _notificator.GetDictionary())
+            {
+                ModelState.AddModelError(key, value);
+            }
+
+            return View(dto);
         }
         catch (Exception e)
         {
