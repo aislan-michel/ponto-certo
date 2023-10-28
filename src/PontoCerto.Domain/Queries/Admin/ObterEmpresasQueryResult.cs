@@ -1,13 +1,18 @@
-﻿namespace PontoCerto.Domain.Queries;
+﻿namespace PontoCerto.Domain.Queries.Admin;
 
 public class ObterEmpresasQueryResult
 {
-    public List<EmpresaVm> Empresas { get; set; } = new();
+    public ObterEmpresasQueryResult(IEnumerable<EmpresaDto> empresas)
+    {
+        Empresas = empresas;
+    }
+    
+    public IEnumerable<EmpresaDto> Empresas { get; private set; }
 }
 
-public class EmpresaVm
+public class EmpresaDto
 {
-    public EmpresaVm(string nome, string cnpj, int quantidadeFuncionarios, string userName)
+    public EmpresaDto(string nome, string cnpj, int quantidadeFuncionarios, string userName)
     {
         Nome = nome;
         Cnpj = cnpj;

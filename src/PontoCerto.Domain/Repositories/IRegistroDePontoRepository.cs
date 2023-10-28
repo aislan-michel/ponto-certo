@@ -2,9 +2,7 @@
 
 namespace PontoCerto.Domain.Repositories;
 
-public interface IRegistroDePontoRepository
+public interface IRegistroDePontoRepository : IRepository<RegistroDePonto>
 {
-    Task<IEnumerable<RegistroDePonto>> Obter(Guid colaboradorId);
-    void Adicionar(RegistroDePonto registroDePonto);
-    Task Salvar();
+    
 }

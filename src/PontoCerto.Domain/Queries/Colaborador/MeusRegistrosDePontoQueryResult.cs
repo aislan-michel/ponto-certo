@@ -2,12 +2,17 @@
 
 public class MeusRegistrosDePontoQueryResult
 {
-    public IEnumerable<RegistroDePontoVm> RegistrosDePonto { get; set; } = new List<RegistroDePontoVm>();
+    public MeusRegistrosDePontoQueryResult(IEnumerable<RegistroDePontoDto> registrosDePonto)
+    {
+        RegistrosDePonto = registrosDePonto;
+    }
+    
+    public IEnumerable<RegistroDePontoDto> RegistrosDePonto { get; private set; }
 }
 
-public class RegistroDePontoVm
+public class RegistroDePontoDto
 {
-    public RegistroDePontoVm(string colaborador, DateTime registro)
+    public RegistroDePontoDto(string colaborador, DateTime registro)
     {
         Colaborador = colaborador;
         Registro = registro;

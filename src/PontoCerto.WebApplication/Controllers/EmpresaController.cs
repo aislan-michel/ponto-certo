@@ -42,7 +42,7 @@ public class EmpresaController : Controller
         
             var queryResult = await _empresaService.ObterColaboradores(empresaId);
 
-            var viewModel = queryResult.Colaboradores;
+            var viewModel = queryResult.Colaboradores.Select(x => new ColaboradorVm(x.Nome, x.DataNascimento, x.Email, x.UserName));
         
             return View(viewModel);
         }
@@ -60,19 +60,19 @@ public class EmpresaController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> RegistrarColaborador(RegistrarColaboradorDto dto)
+    public async Task<IActionResult> RegistrarColaborador(RegistrarColaboradorInputModel inputModel)
     {
         if (!ModelState.IsValid)
         {
-            return View(dto);
+            return View(inputModel);
         }
 
         var usuarioId = User.GetLoggedInUserId<string>();
 
         var empresaId = await _empresaService.ObterId(usuarioId);
 
-        var command = new RegistrarColaboradorCommand(dto.PrimeiroNome, dto.UltimoNome,
-            dto.DataNascimento, dto.Email, new Guid(empresaId));
+        var command = new RegistrarColaboradorCommand(inputModel.PrimeiroNome, inputModel.UltimoNome,
+            inputModel.DataNascimento, inputModel.Email, empresaId);
 
         await _empresaService.RegistrarColaborador(command);
 
@@ -86,26 +86,26 @@ public class EmpresaController : Controller
             ModelState.AddModelError(key, value);
         }
 
-        return View(dto);
+        return View(inputModel);
     }
 
     [HttpPost]
-    public async Task<IActionResult> RegistrarColaboradores(RegistrarColaboradoresDto dto)
+    public async Task<IActionResult> RegistrarColaboradores(RegistrarColaboradoresInputModel inputModel)
     {
         try
         {
-            if (dto.Arquivo.Length > 0)
+            if (inputModel.Arquivo.Length > 0)
             {
                 var filePath = Path.GetTempFileName();
 
                 await using var stream = System.IO.File.Create(filePath);
-                await dto.Arquivo.CopyToAsync(stream);
+                await inputModel.Arquivo.CopyToAsync(stream);
             }
 
-            var csv = _registrarColaboradorCsvHelper.GetRecords(dto.Arquivo);
+            var csv = _registrarColaboradorCsvHelper.GetRecords(inputModel.Arquivo);
     
             var colaboradores = csv.Select(x => new RegistrarColaboradorCommand(
-                x.Nome, x.Sobrenome, Convert.ToDateTime(x.DataNascimento), x.Email, dto.EmpresaId));
+                x.Nome, x.Sobrenome, x.DataNascimento, x.Email, inputModel.EmpresaId));
     
             await _empresaService.RegistrarColaboradores(colaboradores);
 

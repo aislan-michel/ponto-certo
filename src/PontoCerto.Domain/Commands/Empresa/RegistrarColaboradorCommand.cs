@@ -2,13 +2,13 @@
 
 public class RegistrarColaboradorCommand
 {
-    public RegistrarColaboradorCommand(string primeiroNome, string ultimoNome, DateTime dataNascimento, string email, Guid empresaId)
+    public RegistrarColaboradorCommand(string primeiroNome, string ultimoNome, string dataNascimento, string email, string empresaId)
     {
         PrimeiroNome = primeiroNome;
         UltimoNome = ultimoNome;
-        DataNascimento = dataNascimento;
+        DataNascimento = Convert.ToDateTime(dataNascimento);
         Email = email;
-        EmpresaId = empresaId;
+        EmpresaId = new Guid(empresaId);
     }
     
     public RegistrarColaboradorCommand(string primeiroNome, string ultimoNome, DateTime dataNascimento, string email, string empresaId)

@@ -5,33 +5,35 @@ using PontoCerto.Domain.Queries.Empresa;
 using PontoCerto.Domain.Repositories;
 using PontoCerto.Domain.Services;
 using PontoCerto.Domain.ValueObjects;
+using PontoCerto.WebApplication.Infrastructure.Extensions;
 using PontoCerto.WebApplication.Infrastructure.Security;
 
 namespace PontoCerto.WebApplication.Services;
 
 public class EmpresaService : IEmpresaService
 {
-    private readonly IEmpresaRepository _empresaRepository;
     private readonly IIdentityService _identityService;
     private readonly INotificator _notificator;
+    private readonly IEmpresaRepository _empresaRepository;
     private readonly IColaboradorRepository _colaboradorRepository;
 
     public EmpresaService(
-        IEmpresaRepository empresaRepository, IIdentityService identityService,
-        INotificator notificator,
+        IIdentityService identityService, 
+        INotificator notificator, 
+        IEmpresaRepository empresaRepository, 
         IColaboradorRepository colaboradorRepository)
     {
-        _empresaRepository = empresaRepository;
         _identityService = identityService;
         _notificator = notificator;
+        _empresaRepository = empresaRepository;
         _colaboradorRepository = colaboradorRepository;
     }
 
     public async Task<string> ObterId(string usuarioId)
     {
-        var empresa = await _empresaRepository.ObterId(usuarioId);
+        var empresa = await _empresaRepository.FirstAsync(x => x.UsuarioId == usuarioId, default);
 
-        return empresa.Id.ToString();
+        return empresa == null ? string.Empty : empresa.Id.ToString();
     }
     
     public async Task Registrar(RegistrarEmpresaCommand command)
@@ -47,9 +49,9 @@ public class EmpresaService : IEmpresaService
 
         var empresa = new Empresa(command.Nome, command.Cnpj, command.QuantidadeFuncionarios, usuarioId);
         
-        _empresaRepository.Adicionar(empresa);
+        _empresaRepository.Add(empresa);
 
-        await _empresaRepository.Salvar();
+        await _empresaRepository.SaveAsync();
     }
 
     public async Task<ObterColaboradoresQueryResult> ObterColaboradores(string empresaId)
@@ -59,7 +61,7 @@ public class EmpresaService : IEmpresaService
             return new ObterColaboradoresQueryResult();
         }
         
-        var colaboradores = await _colaboradorRepository.Obter(empresaId);
+        var colaboradores = await _colaboradorRepository.GetDataAsync(x => x.EmpresaId == empresaId.ToGuid(), default);
 
         if (!colaboradores.Any())
         {
@@ -67,14 +69,13 @@ public class EmpresaService : IEmpresaService
         }
         
         var query = new ObterColaboradoresQueryResult();
-        var empresa = await _empresaRepository.ObterNome(empresaId);
         
         foreach (var colaborador in colaboradores)
         {
             var dataNascimento = colaborador.DataNascimento.ToString("dd/MM/yyyy");
             var userName = await _identityService.GetUserName(colaborador.UsuarioId.ToString());
 
-            query.Colaboradores.Add(new ColaboradorVm(colaborador.Nome.NomeCompleto, empresa.Nome, dataNascimento, colaborador.Email, userName));
+            query.Colaboradores.Add(new ColaboradorDto(colaborador.Nome.NomeCompleto, dataNascimento, colaborador.Email, userName));
         }
 
         return query;
@@ -103,9 +104,9 @@ public class EmpresaService : IEmpresaService
         var colaborador = new Colaborador(new Nome(command.PrimeiroNome, command.UltimoNome),
             command.DataNascimento, command.Email, command.EmpresaId, new Guid(usuarioId));
         
-        _colaboradorRepository.Adicionar(colaborador);
+        _colaboradorRepository.Add(colaborador);
 
-        await _colaboradorRepository.Salvar();
+        await _colaboradorRepository.SaveAsync();
     }
 
     public async Task RegistrarColaboradores(IEnumerable<RegistrarColaboradorCommand> commands)

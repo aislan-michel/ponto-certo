@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PontoCerto.Domain.Repositories;
-using PontoCerto.WebApplication.Infrastructure;
+using PontoCerto.Domain.Services;
 using PontoCerto.WebApplication.Models.Admin;
 
 namespace PontoCerto.WebApplication.Controllers;
@@ -10,28 +8,28 @@ namespace PontoCerto.WebApplication.Controllers;
 [Authorize(Roles = "admin")]
 public class AdminController : Controller
 {
-    private readonly IEmpresaRepository _empresaRepository;
-    private readonly MyDbContext _dbContext;
+    private readonly IAdminService _adminService;
 
-    public AdminController(IEmpresaRepository empresaRepository, MyDbContext dbContext)
+    public AdminController(IAdminService adminService)
     {
-        _empresaRepository = empresaRepository;
-        _dbContext = dbContext;
+        _adminService = adminService;
     }
 
     public async Task<IActionResult> Empresas()
     {
-        var queryResult = await _empresaRepository.Obter();
+        var queryResult = await _adminService.ObterEmpresas();
 
-        var dto = queryResult.Empresas.Select(x => new EmpresaDto(x.Nome, x.Cnpj, x.QuantidadeFuncionarios, x.UserName));
+        var empresas = queryResult.Empresas.Select(x => new EmpresaViewModel(x.Nome, x.Cnpj, x.QuantidadeFuncionarios, x.UserName));
 
-        return View(dto);
+        return View(empresas);
     }
     
     public async Task<IActionResult> PerfisDeAcesso()
     {
-        var roles = await _dbContext.Roles.ToListAsync();
+        var queryResult = await _adminService.ObterPerfisDeAcesso();
+
+        var perfisDeAcesso = queryResult.PerfisDeAcesso.Select(x => new PerfilDeAcessoViewModel(x.Id, x.Nome));
         
-        return View(roles);
+        return View(perfisDeAcesso);
     }
 }

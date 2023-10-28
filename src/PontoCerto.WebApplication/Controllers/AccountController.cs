@@ -27,22 +27,22 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult RegistrarEmpresa()
     {
-        return View(new EmpresaDto());
+        return View(new EmpresaInputModel());
     }
 
     [HttpPost]
-    public async Task<IActionResult> RegistrarEmpresa(EmpresaDto empresaDto)
+    public async Task<IActionResult> RegistrarEmpresa(EmpresaInputModel inputModel)
     {
         try
         {
             if (!ModelState.IsValid)
             {
-                return View(empresaDto);
+                return View(inputModel);
             }
             
             var command =
-                new RegistrarEmpresaCommand(empresaDto.UserName, empresaDto.Password, 
-                    empresaDto.Nome, empresaDto.Cnpj, empresaDto.QuantidadeFuncionarios);
+                new RegistrarEmpresaCommand(inputModel.UserName, inputModel.Password, 
+                    inputModel.Nome, inputModel.Cnpj, inputModel.QuantidadeFuncionarios);
             
             await _empresaService.Registrar(command);
 
@@ -56,7 +56,7 @@ public class AccountController : Controller
                 ModelState.AddModelError(key, value);
             }
 
-            return View(empresaDto);
+            return View(inputModel);
         }
         catch (Exception e)
         {
@@ -72,14 +72,14 @@ public class AccountController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> SignIn(SignInDto dto)
+    public async Task<IActionResult> SignIn(SignInInputModel inputModel)
     {
         if (!ModelState.IsValid)
         {
-            return View(dto);
+            return View(inputModel);
         }
         
-        await _identityService.SignIn(dto.UserName, dto.Password);
+        await _identityService.SignIn(inputModel.UserName, inputModel.Password);
         
         return RedirectToAction("Index", "Home");
     }

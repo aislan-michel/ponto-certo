@@ -4,27 +4,9 @@ using PontoCerto.Domain.Repositories;
 
 namespace PontoCerto.WebApplication.Infrastructure.Repositories;
 
-public class RegistroDePontoRepository : IRegistroDePontoRepository
+public class RegistroDePontoRepository : Repository<RegistroDePonto>, IRegistroDePontoRepository
 {
-    private readonly MyDbContext _dbContext;
-
-    public RegistroDePontoRepository(MyDbContext dbContext)
+    public RegistroDePontoRepository(DbContext context) : base(context)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<IEnumerable<RegistroDePonto>> Obter(Guid colaboradorId)
-    {
-        return await _dbContext.RegistrosDePonto.Where(x => x.ColaboradorId == colaboradorId).ToListAsync();
-    }
-
-    public void Adicionar(RegistroDePonto registroDePonto)
-    {
-        _dbContext.RegistrosDePonto.Add(registroDePonto);
-    }
-
-    public async Task Salvar()
-    {
-        await _dbContext.SaveChangesAsync();
     }
 }

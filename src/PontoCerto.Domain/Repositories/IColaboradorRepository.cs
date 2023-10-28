@@ -2,11 +2,7 @@
 
 namespace PontoCerto.Domain.Repositories;
 
-public interface IColaboradorRepository
+public interface IColaboradorRepository : IRepository<Colaborador>
 {
-    Task<Colaborador?> ObterId(string usuarioId);
-    Task<Colaborador> ObterId(Guid usuarioId);
-    Task<IEnumerable<Colaborador>> Obter(string empresaId);
-    void Adicionar(Colaborador colaborador);
-    Task Salvar();
+    
 }

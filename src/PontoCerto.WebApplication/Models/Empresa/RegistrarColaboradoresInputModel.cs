@@ -2,7 +2,7 @@
 
 namespace PontoCerto.WebApplication.Models.Empresa;
 
-public class RegistrarColaboradoresDto
+public class RegistrarColaboradoresInputModel
 {
     public string EmpresaId { get; set; }
     

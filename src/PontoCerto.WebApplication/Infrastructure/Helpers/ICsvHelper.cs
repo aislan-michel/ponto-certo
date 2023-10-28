@@ -2,5 +2,5 @@
 
 public interface ICsvHelper<T>
 {
-    List<T> GetRecords(IFormFile file);
+    IEnumerable<T> GetRecords(IFormFile file);
 }

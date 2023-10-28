@@ -2,14 +2,14 @@
 
 namespace PontoCerto.WebApplication.Models.Colaborador;
 
-public class EfetuarRegistroDto
+public class EfetuarRegistroInputModel
 {
-    public EfetuarRegistroDto()
+    public EfetuarRegistroInputModel()
     {
         
     }
     
-    public EfetuarRegistroDto(string usuarioId, string userName)
+    public EfetuarRegistroInputModel(string usuarioId, string userName)
     {
         UsuarioId = usuarioId;
         UserName = userName;
