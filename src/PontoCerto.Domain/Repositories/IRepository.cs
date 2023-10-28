@@ -12,8 +12,6 @@ public interface IRepository<T> : IDisposable where T : class
     
     Task SaveAsync();
 
-    Task<T> GetByIdAsync(Guid id);
-
     Task<T?> FirstAsync(Expression<Func<T, bool>>? expression, Func<IQueryable<T>, Func<T, object>>? include);
 
     Task<int> CountAsync(Expression<Func<T, bool>> expression);

@@ -2,24 +2,22 @@
 
 public class ObterColaboradoresQueryResult
 {
-    public List<ColaboradorVm> Colaboradores { get; set; } = new();
+    public List<ColaboradorDto> Colaboradores { get; private set; } = new();
 }
 
-public class ColaboradorVm
+public class ColaboradorDto
 {
-    public ColaboradorVm(string nome, string empresa, string dataNascimento, string email, string userName)
+    public ColaboradorDto(string nome, string dataNascimento, string email, string userName)
     {
         Nome = nome;
         DataNascimento = dataNascimento;
         Email = email;
         UserName = userName;
-        Empresa = empresa;
     }
         
-    public string Nome { get; set; }
-    public string Empresa { get; set; }
-    public string DataNascimento { get; set; }
-    public string Email { get; set; }
-    public string UserName { get; set; }
+    public string Nome { get; private set; }
+    public string DataNascimento { get; private set; }
+    public string Email { get; private set; }
+    public string UserName { get; private set; }
 }
 

@@ -1,8 +1,8 @@
 ﻿namespace PontoCerto.WebApplication.Models.Admin;
 
-public class EmpresaDto
+public class EmpresaViewModel
 {
-    public EmpresaDto(string nome, string cnpj, int quantidadeFuncionarios, string userName)
+    public EmpresaViewModel(string nome, string cnpj, int quantidadeFuncionarios, string userName)
     {
         Nome = nome;
         Cnpj = cnpj;

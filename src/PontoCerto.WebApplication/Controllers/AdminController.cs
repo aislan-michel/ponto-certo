@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PontoCerto.Domain.Repositories;
 using PontoCerto.Domain.Services;
-using PontoCerto.WebApplication.Infrastructure;
 using PontoCerto.WebApplication.Models.Admin;
 
 namespace PontoCerto.WebApplication.Controllers;
@@ -22,17 +19,17 @@ public class AdminController : Controller
     {
         var queryResult = await _adminService.ObterEmpresas();
 
-        var dto = queryResult.Empresas.Select(x => new EmpresaDto(x.Nome, x.Cnpj, x.QuantidadeFuncionarios, x.UserName));
+        var empresas = queryResult.Empresas.Select(x => new EmpresaViewModel(x.Nome, x.Cnpj, x.QuantidadeFuncionarios, x.UserName));
 
-        return View(dto);
+        return View(empresas);
     }
     
     public async Task<IActionResult> PerfisDeAcesso()
     {
         var queryResult = await _adminService.ObterPerfisDeAcesso();
 
-        var dto = queryResult.PerfisDeAcesso.Select(x => new PerfilDeAcessoDto(x.Id, x.Nome));
+        var perfisDeAcesso = queryResult.PerfisDeAcesso.Select(x => new PerfilDeAcessoViewModel(x.Id, x.Nome));
         
-        return View(dto);
+        return View(perfisDeAcesso);
     }
 }

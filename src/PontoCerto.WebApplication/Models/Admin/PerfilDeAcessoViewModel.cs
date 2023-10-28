@@ -1,8 +1,8 @@
 ﻿namespace PontoCerto.WebApplication.Models.Admin;
 
-public class PerfilDeAcessoDto
+public class PerfilDeAcessoViewModel
 {
-    public PerfilDeAcessoDto(string id, string? nome)
+    public PerfilDeAcessoViewModel(string id, string? nome)
     {
         Id = id;
         Nome = nome ?? string.Empty;

@@ -2,17 +2,17 @@
 
 public class PerfilDeAcessoQueryResult
 {
-    public PerfilDeAcessoQueryResult(IEnumerable<PerfilDeAcessoVm> perfisDeAcesso)
+    public PerfilDeAcessoQueryResult(IEnumerable<PerfilDeAcessoDto> perfisDeAcesso)
     {
         PerfisDeAcesso = perfisDeAcesso;
     }
     
-    public IEnumerable<PerfilDeAcessoVm> PerfisDeAcesso { get; private set; } = Enumerable.Empty<PerfilDeAcessoVm>();
+    public IEnumerable<PerfilDeAcessoDto> PerfisDeAcesso { get; private set; }
 }
 
-public class PerfilDeAcessoVm
+public class PerfilDeAcessoDto
 {
-    public PerfilDeAcessoVm(string id, string? nome)
+    public PerfilDeAcessoDto(string id, string? nome)
     {
         Id = id;
         Nome = nome ?? string.Empty;

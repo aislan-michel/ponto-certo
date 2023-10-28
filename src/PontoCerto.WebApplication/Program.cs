@@ -7,6 +7,7 @@ using PontoCerto.Domain.Repositories;
 using PontoCerto.Domain.Services;
 using PontoCerto.WebApplication.Infrastructure;
 using PontoCerto.WebApplication.Infrastructure.Helpers;
+using PontoCerto.WebApplication.Infrastructure.Helpers.Models;
 using PontoCerto.WebApplication.Infrastructure.Repositories;
 using PontoCerto.WebApplication.Infrastructure.Security;
 using PontoCerto.WebApplication.Services;
@@ -29,17 +30,39 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = false;
 }).AddEntityFrameworkStores<MyDbContext>().AddDefaultTokenProviders();
 
-builder.Services.AddScoped<IEmpresaService, EmpresaService>();
-builder.Services.AddScoped<IColaboradorSerivce, ColaboradorService>();
-builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IColaboradorRepository>(x => new ColaboradorRepository(x.GetRequiredService<MyDbContext>()));
+builder.Services.AddScoped<IEmpresaRepository>(x => new EmpresaRepository(x.GetRequiredService<MyDbContext>()));
+builder.Services.AddScoped<IRegistroDePontoRepository>(x => new RegistroDePontoRepository(x.GetRequiredService<MyDbContext>()));
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IEmpresaService>(x => new EmpresaService(
+    x.GetRequiredService<IIdentityService>(), 
+    x.GetRequiredService<INotificator>(), 
+    x.GetRequiredService<IEmpresaRepository>(), 
+    x.GetRequiredService<IColaboradorRepository>()));
 
-builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IColaboradorSerivce>(x => new ColaboradorService(
+    x.GetRequiredService<IColaboradorRepository>(), 
+    x.GetRequiredService<IRegistroDePontoRepository>(), 
+    x.GetRequiredService<INotificator>()));
+
+builder.Services.AddScoped<IAdminService>(x => new AdminService(
+    x.GetRequiredService<IEmpresaRepository>(), 
+    x.GetRequiredService<IIdentityService>(), 
+    x.GetRequiredService<MyDbContext>()));
+
+builder.Services.AddScoped<IIdentityService>(x => new IdentityService(
+    x.GetRequiredService<IColaboradorRepository>(), 
+    x.GetRequiredService<UserManager<IdentityUser>>(), 
+    x.GetRequiredService<SignInManager<IdentityUser>>(), 
+    x.GetRequiredService<INotificator>(), 
+    x.GetRequiredService<ILogger<IdentityService>>()));
+
 builder.Services.AddScoped<INotificator>(x => new Notificator(new List<Notification>(0)));
-builder.Services.AddScoped(typeof(ICsvHelper<>), typeof(CsvHelper<>));
+
+builder.Services.AddScoped<ICsvHelper<RegistrarColaboradorCsv>>(x => new CsvHelper<RegistrarColaboradorCsv>(default));
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.ConfigureApplicationCookie(options =>

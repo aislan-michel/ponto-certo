@@ -5,15 +5,15 @@ using PontoCerto.Domain.Repositories;
 
 namespace PontoCerto.WebApplication.Infrastructure.Repositories;
 
-public abstract class Repository<T> : IRepository<T> where T : class, new()
+public class Repository<T> : IRepository<T> where T : class
 {
     private readonly DbContext _context;
     private readonly DbSet<T> _dbSet;
 
-    protected Repository(DbContext context, DbSet<T> dbSet)
+    public Repository(DbContext context)
     {
         _context = context;
-        _dbSet = dbSet;
+        _dbSet = context.Set<T>();
     }
 
     public void Dispose()
@@ -41,11 +41,6 @@ public abstract class Repository<T> : IRepository<T> where T : class, new()
         await _context.SaveChangesAsync();
     }
 
-    public Task<T> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<T?> FirstAsync(Expression<Func<T, bool>>? expression, Func<IQueryable<T>, Func<T, object>>? include)
     {
         var query = _dbSet.AsQueryable();
@@ -60,7 +55,7 @@ public abstract class Repository<T> : IRepository<T> where T : class, new()
             query = include(query) as IIncludableQueryable<T,object>;
         }
             
-        return query != null ? await query.FirstOrDefaultAsync() : new T();
+        return query != null ? await query.FirstOrDefaultAsync() : null;
     }
 
     public async Task<int> CountAsync(Expression<Func<T, bool>> expression)

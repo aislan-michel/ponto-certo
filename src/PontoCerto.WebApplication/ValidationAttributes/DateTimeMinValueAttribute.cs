@@ -8,8 +8,7 @@ public class DateTimeMinValueAttribute : ValidationAttribute
     {
         return value switch
         {
-            null => true,
-            DateTime dateTimeValue => dateTimeValue == DateTime.MinValue,
+            DateTime dateTimeValue => dateTimeValue != DateTime.MinValue,
             _ => false
         };
     }

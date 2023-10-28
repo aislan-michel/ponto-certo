@@ -3,7 +3,7 @@ using PontoCerto.WebApplication.ValidationAttributes;
 
 namespace PontoCerto.WebApplication.Models.Empresa;
 
-public class RegistrarColaboradorDto
+public class RegistrarColaboradorInputModel
 {
     [Required(ErrorMessage = "Campo obrigatório"), Display(Name = "Nome")]
     public string PrimeiroNome { get; set; }

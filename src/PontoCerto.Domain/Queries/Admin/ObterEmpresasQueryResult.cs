@@ -2,17 +2,17 @@
 
 public class ObterEmpresasQueryResult
 {
-    public ObterEmpresasQueryResult(IEnumerable<EmpresaVm> empresas)
+    public ObterEmpresasQueryResult(IEnumerable<EmpresaDto> empresas)
     {
         Empresas = empresas;
     }
     
-    public IEnumerable<EmpresaVm> Empresas { get; private set; }
+    public IEnumerable<EmpresaDto> Empresas { get; private set; }
 }
 
-public class EmpresaVm
+public class EmpresaDto
 {
-    public EmpresaVm(string nome, string cnpj, int quantidadeFuncionarios, string userName)
+    public EmpresaDto(string nome, string cnpj, int quantidadeFuncionarios, string userName)
     {
         Nome = nome;
         Cnpj = cnpj;

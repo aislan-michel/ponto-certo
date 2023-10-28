@@ -14,14 +14,14 @@ public class EmpresaService : IEmpresaService
 {
     private readonly IIdentityService _identityService;
     private readonly INotificator _notificator;
-    private readonly IRepository<Empresa> _empresaRepository;
-    private readonly IRepository<Colaborador> _colaboradorRepository;
+    private readonly IEmpresaRepository _empresaRepository;
+    private readonly IColaboradorRepository _colaboradorRepository;
 
     public EmpresaService(
         IIdentityService identityService, 
         INotificator notificator, 
-        IRepository<Empresa> empresaRepository, 
-        IRepository<Colaborador> colaboradorRepository)
+        IEmpresaRepository empresaRepository, 
+        IColaboradorRepository colaboradorRepository)
     {
         _identityService = identityService;
         _notificator = notificator;
@@ -69,14 +69,13 @@ public class EmpresaService : IEmpresaService
         }
         
         var query = new ObterColaboradoresQueryResult();
-        var empresa = await _empresaRepository.FirstAsync(x => x.Id == empresaId.ToGuid(), default);
         
         foreach (var colaborador in colaboradores)
         {
             var dataNascimento = colaborador.DataNascimento.ToString("dd/MM/yyyy");
             var userName = await _identityService.GetUserName(colaborador.UsuarioId.ToString());
 
-            query.Colaboradores.Add(new ColaboradorVm(colaborador.Nome.NomeCompleto, empresa.Nome, dataNascimento, colaborador.Email, userName));
+            query.Colaboradores.Add(new ColaboradorDto(colaborador.Nome.NomeCompleto, dataNascimento, colaborador.Email, userName));
         }
 
         return query;

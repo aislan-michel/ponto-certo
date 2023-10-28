@@ -10,13 +10,13 @@ namespace PontoCerto.WebApplication.Services;
 
 public class ColaboradorService : IColaboradorSerivce
 {
-    private readonly IRepository<Colaborador> _colaboradorRepository;
-    private readonly IRepository<RegistroDePonto> _registroDePontoRepository;
+    private readonly IColaboradorRepository _colaboradorRepository;
+    private readonly IRegistroDePontoRepository _registroDePontoRepository;
     private readonly INotificator _notificator;
 
     public ColaboradorService(
-        IRepository<Colaborador> colaboradorRepository, 
-        IRepository<RegistroDePonto> registroDePontoRepository, 
+        IColaboradorRepository colaboradorRepository, 
+        IRegistroDePontoRepository registroDePontoRepository, 
         INotificator notificator)
     {
         _colaboradorRepository = colaboradorRepository;
@@ -28,10 +28,8 @@ public class ColaboradorService : IColaboradorSerivce
     {
         var registrosDePonto = await _registroDePontoRepository.GetDataAsync(x => x.ColaboradorId == colaboradorId, default);
 
-        return new MeusRegistrosDePontoQueryResult
-        {
-            RegistrosDePonto = registrosDePonto.Select(x => new RegistroDePontoVm(x.ColaboradorId.ToString(), x.Registro))
-        };
+        return new MeusRegistrosDePontoQueryResult(registrosDePonto.Select(x =>
+            new RegistroDePontoDto(x.ColaboradorId.ToString(), x.Registro)));
     }
 
     public async Task EfetuarRegistroDePonto(EfetuarRegistroDePontoCommand command)

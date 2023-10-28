@@ -34,20 +34,20 @@ public class ColaboradorController : Controller
 
         var userName = await _identityService.GetUserName(usuarioId);
         
-        return View(new EfetuarRegistroDto(usuarioId, userName));
+        return View(new EfetuarRegistroInputModel(usuarioId, userName));
     }
     
     [HttpPost]
-    public async Task<IActionResult> EfetuarRegistro(EfetuarRegistroDto dto)
+    public async Task<IActionResult> EfetuarRegistro(EfetuarRegistroInputModel inputModel)
     {
         try
         {
             if (!ModelState.IsValid)
             {
-                return View(dto);
+                return View(inputModel);
             }
 
-            await _colaboradorSerivce.EfetuarRegistroDePonto(new EfetuarRegistroDePontoCommand(dto.UsuarioId, dto.UserName, dto.Marcacao));
+            await _colaboradorSerivce.EfetuarRegistroDePonto(new EfetuarRegistroDePontoCommand(inputModel.UsuarioId, inputModel.UserName, inputModel.Marcacao));
             
             if (!_notificator.HaveNotifications())
             {
@@ -59,7 +59,7 @@ public class ColaboradorController : Controller
                 ModelState.AddModelError(key, value);
             }
 
-            return View(dto);
+            return View(inputModel);
         }
         catch (Exception e)
         {
