@@ -16,38 +16,30 @@ public class EmpresaService : IEmpresaService
     private readonly INotificator _notificator;
     private readonly IEmpresaRepository _empresaRepository;
     private readonly IColaboradorRepository _colaboradorRepository;
+    private readonly ICargoRepository _cargoRepository;
 
     public EmpresaService(
         IIdentityService identityService, 
         INotificator notificator, 
         IEmpresaRepository empresaRepository, 
-        IColaboradorRepository colaboradorRepository)
+        IColaboradorRepository colaboradorRepository, 
+        ICargoRepository cargoRepository)
     {
         _identityService = identityService;
         _notificator = notificator;
         _empresaRepository = empresaRepository;
         _colaboradorRepository = colaboradorRepository;
+        _cargoRepository = cargoRepository;
     }
 
-    public async Task<string> ObterId(string usuarioId)
+    public async Task<Empresa> ObterEmpresa(string cnpj)
     {
-        var empresa = await _empresaRepository.FirstAsync(x => x.UsuarioId == usuarioId, default);
-
-        return empresa == null ? string.Empty : empresa.Id.ToString();
+        return await _empresaRepository.FirstAsync(x => x.Cnpj == cnpj, default) ?? new Empresa(Guid.Empty, string.Empty);
     }
     
     public async Task Registrar(RegistrarEmpresaCommand command)
     {
-        await _identityService.Register(command.UserName, command.Senha, Role.Empresa);
-
-        if (_notificator.HaveNotifications())
-        {
-            return;
-        }
-
-        var usuarioId = await _identityService.GetUserId(command.UserName);
-
-        var empresa = new Empresa(command.Nome, command.Cnpj, command.QuantidadeFuncionarios, usuarioId);
+        var empresa = new Empresa(command.Nome, command.Cnpj, command.QuantidadeFuncionarios);
         
         _empresaRepository.Add(empresa);
 
@@ -61,7 +53,7 @@ public class EmpresaService : IEmpresaService
             return new ObterColaboradoresQueryResult();
         }
         
-        var colaboradores = await _colaboradorRepository.GetDataAsync(x => x.EmpresaId == empresaId.ToGuid(), default);
+        var colaboradores = await _colaboradorRepository.GetDataAsync(x => x.EmpresaId == empresaId, default);
 
         if (!colaboradores.Any())
         {
@@ -88,9 +80,7 @@ public class EmpresaService : IEmpresaService
 
     public async Task RegistrarColaborador(RegistrarColaboradorCommand command)
     {
-        //todo: concatenar conteudo do email antes do '@' + @ + nome d1a empresa em letras minusculas e tudo junto + .com.br 
-        
-        var usuario = new Usuario($"{command.Email.Split("@").First()}@pontocerto.com.br" , "Teste@123", Role.Colaborador);
+        var usuario = new Usuario(command.Username, "Teste@123", Role.Colaborador);
 
         await _identityService.Register(usuario);
 
@@ -100,9 +90,34 @@ public class EmpresaService : IEmpresaService
         }
 
         var usuarioId = await _identityService.GetUserId(usuario.UserName);
+
+        var cargo = await _cargoRepository.FirstAsync(x => x.Nome == command.CargoId, default);
         
         var colaborador = new Colaborador(new Nome(command.PrimeiroNome, command.UltimoNome),
-            command.DataNascimento, command.Email, command.EmpresaId, new Guid(usuarioId));
+            command.DataNascimento, command.Email, command.EmpresaId, usuarioId, cargo.Id);
+        
+        _colaboradorRepository.Add(colaborador);
+
+        await _colaboradorRepository.SaveAsync();
+    }
+
+    public async Task RegistrarGerente(RegistrarGerenteCommand command)
+    {
+        var usuario = new Usuario(command.Username, command.Senha, Role.Gerente);
+
+        await _identityService.Register(usuario);
+
+        if (_notificator.HaveNotifications())
+        {
+            return;
+        }
+
+        var usuarioId = await _identityService.GetUserId(usuario.UserName);
+
+        var cargo = await _cargoRepository.FirstAsync(x => x.Id == command.CargoId, default);
+        
+        var colaborador = new Colaborador(new Nome(command.PrimeiroNome, command.UltimoNome),
+            command.DataNascimento, command.Email, command.EmpresaId, usuarioId, cargo.Id);
         
         _colaboradorRepository.Add(colaborador);
 

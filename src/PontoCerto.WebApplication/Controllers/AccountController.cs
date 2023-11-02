@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PontoCerto.Domain.Commands.Empresa;
 using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Services;
+using PontoCerto.Domain.ValueObjects;
 using PontoCerto.WebApplication.Infrastructure.Security;
 using PontoCerto.WebApplication.Models.Account;
 
@@ -13,6 +14,7 @@ public class AccountController : Controller
     private readonly IEmpresaService _empresaService;
     private readonly INotificator _notificator;
     private readonly ILogger<AccountController> _logger;
+    private static RegistrarEmpresaCommand _registrarEmpresaCommand;
 
     public AccountController(
         IIdentityService identityService, IEmpresaService empresaService,
@@ -27,11 +29,11 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult RegistrarEmpresa()
     {
-        return View(new EmpresaInputModel());
+        return View(new RegistrarEmpresaInputModel());
     }
 
     [HttpPost]
-    public async Task<IActionResult> RegistrarEmpresa(EmpresaInputModel inputModel)
+    public async Task<IActionResult> RegistrarEmpresa(RegistrarEmpresaInputModel inputModel)
     {
         try
         {
@@ -40,29 +42,52 @@ public class AccountController : Controller
                 return View(inputModel);
             }
             
-            var command =
-                new RegistrarEmpresaCommand(inputModel.UserName, inputModel.Password, 
-                    inputModel.Nome, inputModel.Cnpj, inputModel.QuantidadeFuncionarios);
-            
-            await _empresaService.Registrar(command);
+            _registrarEmpresaCommand =
+                new RegistrarEmpresaCommand(inputModel.Nome, inputModel.Cnpj, inputModel.QuantidadeFuncionarios);
 
-            if (!_notificator.HaveNotifications())
-            {
-                return RedirectToAction(nameof(SignIn));
-            }
-            
-            foreach (var (key, value) in _notificator.GetDictionary())
-            {
-                ModelState.AddModelError(key, value);
-            }
-
-            return View(inputModel);
+            return RedirectToAction(nameof(RegistrarGerente));
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Falha ao cadastrar empresa");
             throw;
         }
+    }
+    
+    [HttpGet]
+    public IActionResult RegistrarGerente()
+    {
+        return View(new RegistrarGerenteInputModel());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RegistrarGerente(RegistrarGerenteInputModel inputModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(inputModel);
+        }
+        
+        await _empresaService.Registrar(_registrarEmpresaCommand);
+
+        var empresa = await _empresaService.ObterEmpresa(_registrarEmpresaCommand.Cnpj);
+
+        var command = new RegistrarGerenteCommand(inputModel.UserName, inputModel.Password, inputModel.Nome, inputModel.Sobrenome, inputModel.DataNascimento,
+            inputModel.Email, empresa.Id, inputModel.Cargo);
+
+        await _empresaService.RegistrarGerente(command);
+        
+        if (!_notificator.HaveNotifications())
+        {
+            return RedirectToAction(nameof(SignIn));
+        }
+
+        foreach (var (key, value) in _notificator.GetDictionary())
+        {
+            ModelState.AddModelError(key, value);
+        }
+
+        return View(inputModel);
     }
 
     [HttpGet]

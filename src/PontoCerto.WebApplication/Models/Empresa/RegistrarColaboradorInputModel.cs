@@ -5,6 +5,9 @@ namespace PontoCerto.WebApplication.Models.Empresa;
 
 public class RegistrarColaboradorInputModel
 {
+    [Required(ErrorMessage = "Campo obrigatório"), Display(Name = "Login")]
+    public string UserName { get; set; }
+    
     [Required(ErrorMessage = "Campo obrigatório"), Display(Name = "Nome")]
     public string PrimeiroNome { get; set; }
     
@@ -16,4 +19,7 @@ public class RegistrarColaboradorInputModel
     
     [EmailAddress(ErrorMessage = "Valor inválido"), Required(ErrorMessage = "Campo obrigatório"), Display(Name = "E-mail utilzado pelo colaborador")]
     public string Email { get; set; }
+    
+    [Required(ErrorMessage = "Campo obrigatório"), Display(Name = "Cargo")]
+    public string CargoId { get; set; }
 }

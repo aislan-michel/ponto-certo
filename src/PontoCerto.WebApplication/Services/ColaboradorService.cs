@@ -26,7 +26,7 @@ public class ColaboradorService : IColaboradorSerivce
 
     public async Task<MeusRegistrosDePontoQueryResult> MeusRegistrosDePonto(Guid colaboradorId)
     {
-        var registrosDePonto = await _registroDePontoRepository.GetDataAsync(x => x.ColaboradorId == colaboradorId, default);
+        var registrosDePonto = await _registroDePontoRepository.GetDataAsync(x => x.ColaboradorId == colaboradorId.ToString(), default);
 
         return new MeusRegistrosDePontoQueryResult(registrosDePonto.Select(x =>
             new RegistroDePontoDto(x.ColaboradorId.ToString(), x.Registro)));
@@ -34,7 +34,7 @@ public class ColaboradorService : IColaboradorSerivce
 
     public async Task EfetuarRegistroDePonto(EfetuarRegistroDePontoCommand command)
     {
-        var colaborador = await _colaboradorRepository.FirstAsync(x => x.UsuarioId == command.UsuarioId.ToGuid(), default);
+        var colaborador = await _colaboradorRepository.FirstAsync(x => x.UsuarioId == command.UsuarioId, default);
 
         if (colaborador == null)
         {

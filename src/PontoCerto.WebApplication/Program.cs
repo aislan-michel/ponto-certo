@@ -33,12 +33,14 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 builder.Services.AddScoped<IColaboradorRepository>(x => new ColaboradorRepository(x.GetRequiredService<MyDbContext>()));
 builder.Services.AddScoped<IEmpresaRepository>(x => new EmpresaRepository(x.GetRequiredService<MyDbContext>()));
 builder.Services.AddScoped<IRegistroDePontoRepository>(x => new RegistroDePontoRepository(x.GetRequiredService<MyDbContext>()));
+builder.Services.AddScoped<ICargoRepository>(x => new CargoRepository(x.GetRequiredService<MyDbContext>()));
 
 builder.Services.AddScoped<IEmpresaService>(x => new EmpresaService(
     x.GetRequiredService<IIdentityService>(), 
     x.GetRequiredService<INotificator>(), 
     x.GetRequiredService<IEmpresaRepository>(), 
-    x.GetRequiredService<IColaboradorRepository>()));
+    x.GetRequiredService<IColaboradorRepository>(),
+    x.GetRequiredService<ICargoRepository>()));
 
 builder.Services.AddScoped<IColaboradorSerivce>(x => new ColaboradorService(
     x.GetRequiredService<IColaboradorRepository>(), 
@@ -46,8 +48,7 @@ builder.Services.AddScoped<IColaboradorSerivce>(x => new ColaboradorService(
     x.GetRequiredService<INotificator>()));
 
 builder.Services.AddScoped<IAdminService>(x => new AdminService(
-    x.GetRequiredService<IEmpresaRepository>(), 
-    x.GetRequiredService<IIdentityService>(), 
+    x.GetRequiredService<IEmpresaRepository>(),
     x.GetRequiredService<MyDbContext>()));
 
 builder.Services.AddScoped<IIdentityService>(x => new IdentityService(
@@ -88,36 +89,31 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<MyDbContext>();
 
-    var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-
-    if (pendingMigrations.Any())
+    if (!await context.Roles.AnyAsync())
     {
-        await context.Database.MigrateAsync();
-
-        const string empresa = "empresa";
+        const string gerente = "gerente";
         const string admin = "admin";
         const string colaborador = "colaborador";
-        
+            
         context.Roles.AddRange(new List<IdentityRole>(3)
         {
-            new(empresa){NormalizedName = empresa.ToUpper()},
+            new(gerente){NormalizedName = gerente.ToUpper()},
             new(admin){NormalizedName = admin.ToUpper()},
             new(colaborador){NormalizedName = colaborador.ToUpper()}
         });
 
         await context.SaveChangesAsync();
+    }
 
-        var identityUser = new IdentityUser("ponto.certo@admin");
+    if (!await context.Cargos.AnyAsync())
+    {
+        context.Cargos.AddRange(new List<Cargo>()
+        {
+            new ("CEO"),
+            new ("CTO"),
+            new ("Analista de Recursos Humanos")
+        });
 
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-        
-        await userManager.CreateAsync(identityUser, "Teste@123");
-        await userManager.AddToRoleAsync(identityUser, admin);
-
-        var usuario = await userManager.FindByNameAsync("ponto.certo@admin");
-
-        context.Empresas.Add(new Empresa("Ponto Certo Inc.", "00000000000000", 1, usuario.Id));
-        
         await context.SaveChangesAsync();
     }
 }

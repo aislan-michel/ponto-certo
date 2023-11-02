@@ -18,4 +18,5 @@ public class Usuario
     public string UserName { get; private set; } = string.Empty;
     public string RawPassword { get; private set; } = string.Empty;
     public string Role { get; private set; } = string.Empty;
+    public virtual Colaborador Colaborador { get; private set; }
 }

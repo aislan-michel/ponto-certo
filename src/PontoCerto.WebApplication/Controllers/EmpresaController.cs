@@ -10,7 +10,7 @@ using PontoCerto.WebApplication.Models.Empresa;
 
 namespace PontoCerto.WebApplication.Controllers;
 
-[Authorize(Roles = "admin,empresa")]
+[Authorize(Roles = "admin,gerente")]
 public class EmpresaController : Controller
 {
     private readonly IEmpresaService _empresaService;
@@ -34,9 +34,7 @@ public class EmpresaController : Controller
     {
         try
         {
-            var usuarioId = User.GetLoggedInUserId<string>();
-
-            var empresaId = await _empresaService.ObterId(usuarioId);
+            var empresaId = User.ObterEmpresaId<string>();
 
             ViewBag.EmpresaId = empresaId;
         
@@ -67,12 +65,10 @@ public class EmpresaController : Controller
             return View(inputModel);
         }
 
-        var usuarioId = User.GetLoggedInUserId<string>();
+        var empresaId = User.ObterEmpresaId<string>();
 
-        var empresaId = await _empresaService.ObterId(usuarioId);
-
-        var command = new RegistrarColaboradorCommand(inputModel.PrimeiroNome, inputModel.UltimoNome,
-            inputModel.DataNascimento, inputModel.Email, empresaId);
+        var command = new RegistrarColaboradorCommand(inputModel.UserName, inputModel.PrimeiroNome, inputModel.UltimoNome,
+            inputModel.DataNascimento, inputModel.Email, empresaId, inputModel.CargoId);
 
         await _empresaService.RegistrarColaborador(command);
 
@@ -104,13 +100,12 @@ public class EmpresaController : Controller
 
             var csv = _registrarColaboradorCsvHelper.GetRecords(inputModel.Arquivo);
     
-            var colaboradores = csv.Select(x => new RegistrarColaboradorCommand(
-                x.Nome, x.Sobrenome, x.DataNascimento, x.Email, inputModel.EmpresaId));
+            var colaboradores = csv.Select(x => new RegistrarColaboradorCommand(x.UserName,
+                x.Nome, x.Sobrenome, x.DataNascimento, x.Email, inputModel.EmpresaId, x.Cargo));
     
             await _empresaService.RegistrarColaboradores(colaboradores);
 
             return RedirectToAction(nameof(Colaboradores));
-
         }
         catch (Exception e)
         {

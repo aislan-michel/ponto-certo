@@ -11,8 +11,8 @@ using PontoCerto.WebApplication.Infrastructure;
 namespace PontoCerto.WebApplication.Infrastructure.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230305015203_CriarRegistroDePonto")]
-    partial class CriarRegistroDePonto
+    [Migration("20231102112159_CriandoTabelas")]
+    partial class CriandoTabelas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -213,11 +213,28 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PontoCerto.Domain.Entities.Cargo", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cargos", (string)null);
+                });
+
             modelBuilder.Entity("PontoCerto.Domain.Entities.Colaborador", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("CargoId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime(6)");
@@ -232,18 +249,21 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
 
                     b.Property<string>("UsuarioId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CargoId");
+
+                    b.HasIndex("EmpresaId");
 
                     b.ToTable("Colaboradores", (string)null);
                 });
 
             modelBuilder.Entity("PontoCerto.Domain.Entities.Empresa", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Cnpj")
                         .IsRequired()
@@ -259,10 +279,6 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
                     b.Property<string>("Segmento")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("UsuarioId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Empresas", (string)null);
@@ -270,17 +286,19 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
 
             modelBuilder.Entity("PontoCerto.Domain.Entities.RegistroDePonto", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<Guid>("ColaboradorId")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("ColaboradorId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("Registro")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ColaboradorId");
 
                     b.ToTable("RegistrosDePonto", (string)null);
                 });
@@ -338,18 +356,32 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
 
             modelBuilder.Entity("PontoCerto.Domain.Entities.Colaborador", b =>
                 {
+                    b.HasOne("PontoCerto.Domain.Entities.Cargo", "Cargo")
+                        .WithMany("Colaboradores")
+                        .HasForeignKey("CargoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PontoCerto.Domain.Entities.Empresa", "Empresa")
+                        .WithMany("Colaboradores")
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("PontoCerto.Domain.ValueObjects.Nome", "Nome", b1 =>
                         {
-                            b1.Property<Guid>("ColaboradorId")
-                                .HasColumnType("char(36)");
+                            b1.Property<string>("ColaboradorId")
+                                .HasColumnType("varchar(255)");
 
                             b1.Property<string>("PrimeiroNome")
                                 .IsRequired()
-                                .HasColumnType("varchar(120)");
+                                .HasColumnType("varchar(120)")
+                                .HasColumnName("Nome");
 
                             b1.Property<string>("UltimoNome")
                                 .IsRequired()
-                                .HasColumnType("varchar(120)");
+                                .HasColumnType("varchar(120)")
+                                .HasColumnName("Sobrenome");
 
                             b1.HasKey("ColaboradorId");
 
@@ -359,6 +391,10 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
                                 .HasForeignKey("ColaboradorId");
                         });
 
+                    b.Navigation("Cargo");
+
+                    b.Navigation("Empresa");
+
                     b.Navigation("Nome")
                         .IsRequired();
                 });
@@ -367,8 +403,8 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
                 {
                     b.OwnsOne("PontoCerto.Domain.ValueObjects.Endereco", "Endereco", b1 =>
                         {
-                            b1.Property<Guid>("EmpresaId")
-                                .HasColumnType("char(36)");
+                            b1.Property<string>("EmpresaId")
+                                .HasColumnType("varchar(255)");
 
                             b1.Property<string>("Bairro")
                                 .HasColumnType("varchar(100)")
@@ -404,6 +440,32 @@ namespace PontoCerto.WebApplication.Infrastructure.Migrations
 
                     b.Navigation("Endereco")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PontoCerto.Domain.Entities.RegistroDePonto", b =>
+                {
+                    b.HasOne("PontoCerto.Domain.Entities.Colaborador", "Colaborador")
+                        .WithMany("RegistrosDePonto")
+                        .HasForeignKey("ColaboradorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Colaborador");
+                });
+
+            modelBuilder.Entity("PontoCerto.Domain.Entities.Cargo", b =>
+                {
+                    b.Navigation("Colaboradores");
+                });
+
+            modelBuilder.Entity("PontoCerto.Domain.Entities.Colaborador", b =>
+                {
+                    b.Navigation("RegistrosDePonto");
+                });
+
+            modelBuilder.Entity("PontoCerto.Domain.Entities.Empresa", b =>
+                {
+                    b.Navigation("Colaboradores");
                 });
 #pragma warning restore 612, 618
         }

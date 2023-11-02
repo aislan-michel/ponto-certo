@@ -115,11 +115,13 @@ public class IdentityService : IIdentityService
             new(ClaimTypes.Sid, user.Id)
         };
         
-        var colaborador = await _colaboradorRepository.FirstAsync(x => x.UsuarioId == user.Id.ToGuid(), default);
+        var colaborador = await _colaboradorRepository.FirstAsync(x => x.UsuarioId == user.Id, default);
 
         if (colaborador != null)
         {
-            claims.Add(new Claim("ColaboradorId", colaborador.Id.ToString()));    
+            claims.Add(new Claim("ColaboradorId", colaborador.Id.ToString()));
+            claims.Add(new Claim("EmpresaId", colaborador.EmpresaId.ToString()));
+            claims.Add(new Claim("Cargo", colaborador.CargoId.ToString()));
         }
 
         var addClaimResult = await _userManager.AddClaimsAsync(user, claims);

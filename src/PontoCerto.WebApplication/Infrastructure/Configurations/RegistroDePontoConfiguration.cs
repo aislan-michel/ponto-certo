@@ -10,7 +10,8 @@ public class RegistroDePontoConfiguration : IEntityTypeConfiguration<RegistroDeP
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Registro);
-        builder.Property(x => x.ColaboradorId);
+        
+        builder.HasOne(x => x.Colaborador).WithMany(x => x.RegistrosDePonto).HasForeignKey(x => x.ColaboradorId);
 
         builder.ToTable("RegistrosDePonto");
     }

@@ -62,7 +62,7 @@
                             </li>                            
                         }
                         
-                        @if (User.IsInRole(Role.Empresa))
+                        @if (User.IsInRole(Role.Gerente))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Empresa" asp-action="Colaboradores">Colaboradores</a>

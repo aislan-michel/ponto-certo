@@ -19,7 +19,7 @@ public class AdminController : Controller
     {
         var queryResult = await _adminService.ObterEmpresas();
 
-        var empresas = queryResult.Empresas.Select(x => new EmpresaViewModel(x.Nome, x.Cnpj, x.QuantidadeFuncionarios, x.UserName));
+        var empresas = queryResult.Empresas.Select(x => new EmpresaViewModel(x.Nome, x.Cnpj, x.QuantidadeFuncionarios));
 
         return View(empresas);
     }

@@ -8,26 +8,31 @@ public class Colaborador
     {
         
     }
-
-    public Colaborador(Guid id)
-    {
-        Id = id;
-    }
     
-    public Colaborador(Nome nome, DateTime dataNascimento, string email, Guid empresaId, Guid usuarioId)
+    public Colaborador(Nome nome, DateTime dataNascimento, string email, string empresaId, string usuarioId, string cargoId)
     {
-        Id = Guid.NewGuid();
+        Id = Guid.NewGuid().ToString();
         Nome = nome;
         DataNascimento = dataNascimento;
         Email = email;
         EmpresaId = empresaId;
         UsuarioId = usuarioId;
+        CargoId = cargoId;
     }
 
-    public Guid Id { get; private set; }
-    public Nome Nome { get; private set; } = new Nome("", "");
-    public DateTime DataNascimento { get; private set; }
+    public string Id { get; private set; } = string.Empty;
+    public Nome Nome { get; private set; } = new (string.Empty, string.Empty);
+    public DateTime DataNascimento { get; private set; } = new DateTime();
     public string Email { get; private set; } = string.Empty;
-    public Guid EmpresaId { get; private set; }
-    public Guid UsuarioId { get; private set; }
+
+    public string EmpresaId { get; private set; } = string.Empty;
+    public virtual Empresa Empresa { get; private set; }
+
+    public string UsuarioId { get; private set; } = string.Empty;
+    public virtual Usuario Usuario { get; private set; }
+
+    public string CargoId { get; private set; } = string.Empty;
+    public virtual Cargo Cargo { get; private set; }
+
+    public virtual IEnumerable<RegistroDePonto> RegistrosDePonto { get; private set; }
 }

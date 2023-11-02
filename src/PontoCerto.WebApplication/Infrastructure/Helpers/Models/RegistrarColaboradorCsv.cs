@@ -5,18 +5,13 @@ namespace PontoCerto.WebApplication.Infrastructure.Helpers.Models;
 [Delimiter(";")] 
 public class RegistrarColaboradorCsv
 {
-    public RegistrarColaboradorCsv(string nome, string sobrenome, string dataNascimento, string email)
-    {
-        Nome = nome;
-        Sobrenome = sobrenome;
-        DataNascimento = dataNascimento;
-        Email = email;
-    }
-
-    [Index(0)]
+    [Name("Login")]
+    public string UserName { get; set; }
+    
+    [Name("Nome")]
     public string Nome { get; set; }
     
-    [Index(1)]
+    [Name("Sobrenome")]
     public string Sobrenome { get; set; }
     
     [Name("Data de nascimento (dd/mm/aaaa)")]
@@ -24,4 +19,7 @@ public class RegistrarColaboradorCsv
     
     [Name("E-mail")]
     public string Email { get; set; }
+    
+    [Name("Cargo")]
+    public string Cargo { get; set; }
 }

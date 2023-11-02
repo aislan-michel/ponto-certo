@@ -1,0 +1,66 @@
+﻿@model PontoCerto.WebApplication.Models.Account.RegistrarGerenteInputModel
+
+@{
+    ViewData["Title"] = "Registrar colaborador";
+    Layout = "_Layout";
+}
+
+<form method="post" asp-action="RegistrarGerente">
+    <div class="mb-3">
+        @Html.LabelFor(x => x.UserName, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.UserName, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "invalid-feedback" })
+    </div>
+    
+    <div class="mb-3">
+        @Html.LabelFor(x => x.Password, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Password, "", new { @class = "form-control", @type = "password" })
+        @Html.ValidationMessageFor(x => x.Password, "", new { @class = "invalid-feedback" })
+    </div>
+    
+    <div class="mb-3">
+        @Html.LabelFor(x => x.Nome, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Nome, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Nome, "", new { @class = "invalid-feedback" })
+    </div>
+    
+    <div class="mb-3">
+        @Html.LabelFor(x => x.Sobrenome, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Sobrenome, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Sobrenome, "", new { @class = "invalid-feedback" })
+    </div>
+    
+    <div class="mb-3">
+        @Html.LabelFor(x => x.DataNascimento, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.DataNascimento, "", new { @class = "form-control", @type = "date" })
+        @Html.ValidationMessageFor(x => x.DataNascimento, "", new { @class = "invalid-feedback" })
+    </div>
+    
+    <div class="mb-3">
+        @Html.LabelFor(x => x.Email, new { @class = "form-label" })
+        @Html.TextBoxFor(x => x.Email, "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Email, "", new { @class = "invalid-feedback" })
+    </div>
+    
+    <div class="mb-3">
+        @Html.LabelFor(x => x.Cargo, new { @class = "form-label" })
+        @Html.DropDownListFor(x => x.Cargo, new List<SelectListItem>(), "Clique para abrir o menu", new { @class = "form-control", @id = "cargos" })
+        @Html.ValidationMessageFor(x => x.Cargo, "", new { @class = "invalid-feedback" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+
+@section Scripts
+{
+    <script>
+    
+        $(document).ready(() => carregarCargos());
+    
+        function carregarCargos(){
+            $.get("@Url.Action("Obter", "Cargo")", data => {                
+                data.forEach(x => $("#cargos").append(`<option value="${x.id}">${x.nome}</option>`));
+            });
+        }
+    </script>
+}

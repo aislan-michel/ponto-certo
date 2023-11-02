@@ -10,14 +10,15 @@ public class RegistroDePonto
         
     }
     
-    public RegistroDePonto(Guid colaboradorId, DateTime registro)
+    public RegistroDePonto(string colaboradorId, DateTime registro)
     {
-        Id = Guid.NewGuid();
+        Id = Guid.NewGuid().ToString();
         ColaboradorId = colaboradorId;
         Registro = registro;
     }
 
-    public Guid Id { get; private set; }
-    public Guid ColaboradorId { get; private set; } = Guid.Empty;
-    public DateTime Registro { get; private set; } = DateTime.MinValue;
+    public string Id { get; private set; } = string.Empty;
+    public string ColaboradorId { get; private set; } = string.Empty;
+    public virtual Colaborador Colaborador { get; set; }
+    public DateTime Registro { get; private set; } = new DateTime();
 }

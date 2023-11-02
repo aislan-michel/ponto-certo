@@ -11,31 +11,20 @@ namespace PontoCerto.WebApplication.Services;
 public class AdminService : IAdminService
 {
     private readonly IEmpresaRepository _empresaRepository;
-    private readonly IIdentityService _identityService;
     //todo: remover injeção do dbcontext
     private readonly MyDbContext _dbContext;
 
-    public AdminService(IEmpresaRepository empresaRepository, IIdentityService identityService, MyDbContext dbContext)
+    public AdminService(IEmpresaRepository empresaRepository, MyDbContext dbContext)
     {
         _empresaRepository = empresaRepository;
-        _identityService = identityService;
         _dbContext = dbContext;
     }
 
     public async Task<ObterEmpresasQueryResult> ObterEmpresas()
     {
         var empresas = await _empresaRepository.GetDataAsync(default, default);
-
-        var empresasVm = new List<EmpresaDto>();
-
-        foreach (var empresa in empresas)
-        {
-            var userName = await _identityService.GetUserName(empresa.UsuarioId);
-
-            empresasVm.Add(new EmpresaDto(empresa.Nome, empresa.Cnpj, empresa.QuantidadeFuncionarios, userName));
-        }
         
-        return new ObterEmpresasQueryResult(empresasVm);
+        return new ObterEmpresasQueryResult(empresas.Select(x => new EmpresaDto(x.Nome, x.Cnpj, x.QuantidadeFuncionarios)));
     }
 
     public async Task<PerfilDeAcessoQueryResult> ObterPerfisDeAcesso()

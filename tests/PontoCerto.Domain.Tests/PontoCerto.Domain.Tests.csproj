@@ -25,4 +25,5 @@
       <ProjectReference Include="..\..\src\PontoCerto.Domain\PontoCerto.Domain.csproj" />
     </ItemGroup>
 
+
 </Project>

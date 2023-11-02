@@ -7,9 +7,7 @@ public class CriarEmpresa
     [Fact]
     public void EmpresaXPTO()
     {
-        var usuarioId = Guid.NewGuid();
-        
-        var empresa = new Empresa("Empresa XPTO","24.628.063/0001-55", 2,usuarioId.ToString());
+        var empresa = new Empresa("Empresa XPTO","24.628.063/0001-55", 2);
         
         Assert.NotNull(empresa);
         Assert.NotEmpty(empresa.Cnpj);
