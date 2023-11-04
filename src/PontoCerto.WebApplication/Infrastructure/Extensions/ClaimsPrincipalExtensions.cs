@@ -4,7 +4,7 @@ namespace PontoCerto.WebApplication.Infrastructure.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static T GetLoggedInUserId<T>(this ClaimsPrincipal principal)
+    public static string GetLoggedInUserId(this ClaimsPrincipal principal)
     {
         if (principal == null)
         {
@@ -12,21 +12,23 @@ public static class ClaimsPrincipalExtensions
         }
 
         var loggedInUserId = principal.FindFirstValue(ClaimTypes.Sid);
-
-        if (typeof(T) == typeof(string))
-        {
-            return (T)Convert.ChangeType(loggedInUserId, typeof(T));
-        }
-
-        if (typeof(T) == typeof(int) || typeof(T) == typeof(long))
-        {
-            return loggedInUserId != null ? (T)Convert.ChangeType(loggedInUserId, typeof(T)) : (T)Convert.ChangeType(0, typeof(T));
-        }
-
-        throw new Exception("Invalid type provided");
+        
+        return string.IsNullOrWhiteSpace(loggedInUserId) ? string.Empty : loggedInUserId;
     }
     
-    public static T ObterColaboradorId<T>(this ClaimsPrincipal principal)
+    public static string GetLoggedInUserName(this ClaimsPrincipal principal)
+    {
+        if (principal == null)
+        {
+            throw new ArgumentNullException(nameof(principal));
+        }
+
+        var userName = principal.FindFirstValue("UserName");
+        
+        return string.IsNullOrWhiteSpace(userName) ? string.Empty : userName;
+    }
+    
+    public static string ObterColaboradorId(this ClaimsPrincipal principal)
     {
         if (principal == null)
         {
@@ -34,21 +36,11 @@ public static class ClaimsPrincipalExtensions
         }
 
         var colaboradorId = principal.FindFirstValue("ColaboradorId");
-
-        if (typeof(T) == typeof(string))
-        {
-            return (T)Convert.ChangeType(colaboradorId, typeof(T));
-        }
-
-        if (typeof(T) == typeof(int) || typeof(T) == typeof(long))
-        {
-            return colaboradorId != null ? (T)Convert.ChangeType(colaboradorId, typeof(T)) : (T)Convert.ChangeType(0, typeof(T));
-        }
-
-        throw new Exception("Invalid type provided");
+        
+        return string.IsNullOrWhiteSpace(colaboradorId) ? string.Empty : colaboradorId;
     }
     
-    public static T ObterEmpresaId<T>(this ClaimsPrincipal principal)
+    public static string ObterEmpresaId(this ClaimsPrincipal principal)
     {
         if (principal == null)
         {
@@ -57,17 +49,7 @@ public static class ClaimsPrincipalExtensions
 
         var empresaId = principal.FindFirstValue("EmpresaId");
 
-        if (typeof(T) == typeof(string))
-        {
-            return (T)Convert.ChangeType(empresaId, typeof(T));
-        }
-
-        if (typeof(T) == typeof(int) || typeof(T) == typeof(long))
-        {
-            return empresaId != null ? (T)Convert.ChangeType(empresaId, typeof(T)) : (T)Convert.ChangeType(0, typeof(T));
-        }
-
-        throw new Exception("Invalid type provided");
+        return string.IsNullOrWhiteSpace(empresaId) ? string.Empty : empresaId;
     }
     
     public static T ObterCargo<T>(this ClaimsPrincipal principal)

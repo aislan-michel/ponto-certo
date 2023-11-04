@@ -1,27 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
-using PontoCerto.Domain.Commands.Empresa;
+using PontoCerto.Domain.Commands.Account;
 using PontoCerto.Domain.Notifications;
 using PontoCerto.Domain.Services;
-using PontoCerto.Domain.ValueObjects;
-using PontoCerto.WebApplication.Infrastructure.Security;
 using PontoCerto.WebApplication.Models.Account;
 
 namespace PontoCerto.WebApplication.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly IIdentityService _identityService;
-    private readonly IEmpresaService _empresaService;
+    private readonly IAccountService _accountService;
     private readonly INotificator _notificator;
     private readonly ILogger<AccountController> _logger;
-    private static RegistrarEmpresaCommand _registrarEmpresaCommand;
+    private static RegistrarEmpresaCommand _registrarEmpresaCommand = new(default, default, default);
 
     public AccountController(
-        IIdentityService identityService, IEmpresaService empresaService,
+        IAccountService accountService, 
         INotificator notificator, ILogger<AccountController> logger)
     {
-        _identityService = identityService;
-        _empresaService = empresaService;
+        _accountService = accountService;
         _notificator = notificator;
         _logger = logger;
     }
@@ -33,7 +29,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> RegistrarEmpresa(RegistrarEmpresaInputModel inputModel)
+    public IActionResult RegistrarEmpresa(RegistrarEmpresaInputModel inputModel)
     {
         try
         {
@@ -68,14 +64,14 @@ public class AccountController : Controller
             return View(inputModel);
         }
         
-        await _empresaService.Registrar(_registrarEmpresaCommand);
+        await _accountService.RegistrarEmpresa(_registrarEmpresaCommand);
 
-        var empresa = await _empresaService.ObterEmpresa(_registrarEmpresaCommand.Cnpj);
+        var queryResult = await _accountService.ObterEmpresa(_registrarEmpresaCommand.Cnpj);
 
         var command = new RegistrarGerenteCommand(inputModel.UserName, inputModel.Password, inputModel.Nome, inputModel.Sobrenome, inputModel.DataNascimento,
-            inputModel.Email, empresa.Id, inputModel.Cargo);
+            inputModel.Email, queryResult.Empresa.Id, inputModel.Cargo);
 
-        await _empresaService.RegistrarGerente(command);
+        await _accountService.RegistrarGerente(command);
         
         if (!_notificator.HaveNotifications())
         {
@@ -104,14 +100,14 @@ public class AccountController : Controller
             return View(inputModel);
         }
         
-        await _identityService.SignIn(inputModel.UserName, inputModel.Password);
+        await _accountService.SignIn(inputModel.UserName, inputModel.Password);
         
         return RedirectToAction("Index", "Home");
     }
     
     public new async Task<IActionResult> SignOut()
     {
-        await _identityService.SignOut();
+        await _accountService.SignOut();
 
         return RedirectToAction(nameof(SignIn));
     }

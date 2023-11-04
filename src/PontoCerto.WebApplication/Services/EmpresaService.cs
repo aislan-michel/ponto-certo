@@ -5,7 +5,6 @@ using PontoCerto.Domain.Queries.Empresa;
 using PontoCerto.Domain.Repositories;
 using PontoCerto.Domain.Services;
 using PontoCerto.Domain.ValueObjects;
-using PontoCerto.WebApplication.Infrastructure.Extensions;
 using PontoCerto.WebApplication.Infrastructure.Security;
 
 namespace PontoCerto.WebApplication.Services;
@@ -65,7 +64,7 @@ public class EmpresaService : IEmpresaService
         foreach (var colaborador in colaboradores)
         {
             var dataNascimento = colaborador.DataNascimento.ToString("dd/MM/yyyy");
-            var userName = await _identityService.GetUserName(colaborador.UsuarioId.ToString());
+            var userName = await _identityService.GetUserName(colaborador.UsuarioId);
 
             query.Colaboradores.Add(new ColaboradorDto(colaborador.Nome.NomeCompleto, dataNascimento, colaborador.Email, userName));
         }
@@ -92,29 +91,6 @@ public class EmpresaService : IEmpresaService
         var usuarioId = await _identityService.GetUserId(usuario.UserName);
 
         var cargo = await _cargoRepository.FirstAsync(x => x.Nome == command.CargoId, default);
-        
-        var colaborador = new Colaborador(new Nome(command.PrimeiroNome, command.UltimoNome),
-            command.DataNascimento, command.Email, command.EmpresaId, usuarioId, cargo.Id);
-        
-        _colaboradorRepository.Add(colaborador);
-
-        await _colaboradorRepository.SaveAsync();
-    }
-
-    public async Task RegistrarGerente(RegistrarGerenteCommand command)
-    {
-        var usuario = new Usuario(command.Username, command.Senha, Role.Gerente);
-
-        await _identityService.Register(usuario);
-
-        if (_notificator.HaveNotifications())
-        {
-            return;
-        }
-
-        var usuarioId = await _identityService.GetUserId(usuario.UserName);
-
-        var cargo = await _cargoRepository.FirstAsync(x => x.Id == command.CargoId, default);
         
         var colaborador = new Colaborador(new Nome(command.PrimeiroNome, command.UltimoNome),
             command.DataNascimento, command.Email, command.EmpresaId, usuarioId, cargo.Id);

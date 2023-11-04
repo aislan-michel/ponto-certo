@@ -122,6 +122,7 @@ public class IdentityService : IIdentityService
             claims.Add(new Claim("ColaboradorId", colaborador.Id.ToString()));
             claims.Add(new Claim("EmpresaId", colaborador.EmpresaId.ToString()));
             claims.Add(new Claim("Cargo", colaborador.CargoId.ToString()));
+            claims.Add(new Claim("UserName", user.UserName ?? string.Empty));
         }
 
         var addClaimResult = await _userManager.AddClaimsAsync(user, claims);

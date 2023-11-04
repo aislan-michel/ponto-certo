@@ -24,9 +24,9 @@ public class ColaboradorService : IColaboradorSerivce
         _notificator = notificator;
     }
 
-    public async Task<MeusRegistrosDePontoQueryResult> MeusRegistrosDePonto(Guid colaboradorId)
+    public async Task<MeusRegistrosDePontoQueryResult> MeusRegistrosDePonto(string colaboradorId)
     {
-        var registrosDePonto = await _registroDePontoRepository.GetDataAsync(x => x.ColaboradorId == colaboradorId.ToString(), default);
+        var registrosDePonto = await _registroDePontoRepository.GetDataAsync(x => x.ColaboradorId == colaboradorId, default);
 
         return new MeusRegistrosDePontoQueryResult(registrosDePonto.Select(x =>
             new RegistroDePontoDto(x.ColaboradorId.ToString(), x.Registro)));

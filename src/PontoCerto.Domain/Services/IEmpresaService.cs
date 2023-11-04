@@ -11,7 +11,6 @@ public interface IEmpresaService
     Task<ObterColaboradoresQueryResult> ObterColaboradores(string empresaId);
     Task ObterColaborador();
     Task RegistrarColaborador(RegistrarColaboradorCommand command);
-    Task RegistrarGerente(RegistrarGerenteCommand command);
     Task RegistrarColaboradores(IEnumerable<RegistrarColaboradorCommand> commands);
     Task AtualizarColaborador();
 }

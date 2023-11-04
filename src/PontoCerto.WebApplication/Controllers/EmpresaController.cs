@@ -34,7 +34,7 @@ public class EmpresaController : Controller
     {
         try
         {
-            var empresaId = User.ObterEmpresaId<string>();
+            var empresaId = User.ObterEmpresaId();
 
             ViewBag.EmpresaId = empresaId;
         
@@ -65,7 +65,7 @@ public class EmpresaController : Controller
             return View(inputModel);
         }
 
-        var empresaId = User.ObterEmpresaId<string>();
+        var empresaId = User.ObterEmpresaId();
 
         var command = new RegistrarColaboradorCommand(inputModel.UserName, inputModel.PrimeiroNome, inputModel.UltimoNome,
             inputModel.DataNascimento, inputModel.Email, empresaId, inputModel.CargoId);
